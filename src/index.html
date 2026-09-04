@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>gitcitybanner — banner de contribuições do GitHub</title>
+    <meta
+      name="description"
+      content="Transforme os últimos 365 dias de contribuições de um perfil do GitHub em um banner de cidade noturna."
+    />
+    <link rel="stylesheet" href="./styles/main.css" />
+  </head>
+  <body>
+    <header class="site-header shell">
+      <h1 class="site-title" data-i18n="title">gitcitybanner</h1>
+      <nav class="lang-switch" aria-label="Idioma" data-i18n-aria-label="langSwitchLabel">
+        <span data-i18n="langPt" aria-current="true">PT</span>
+        <span class="lang-switch__separator" aria-hidden="true">·</span>
+        <a href="./en/" hreflang="en" data-i18n="langEn">EN</a>
+      </nav>
+    </header>
+
+    <main class="site-main shell">
+      <p class="tagline" data-i18n="tagline">
+        Transforme os últimos 365 dias de contribuições de um perfil do GitHub em um banner de cidade
+        noturna, pronto para baixar em PNG.
+      </p>
+
+      <div id="app"></div>
+
+      <section id="preview" class="preview" aria-live="polite">
+        <p class="preview__hint" data-i18n="previewEmpty">
+          O banner aparece aqui depois que você gerar.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer shell">
+      <p data-i18n="footer">Projeto open source. Nenhum dado é armazenado.</p>
+    </footer>
+
+    <script type="module" src="./app.ts"></script>
+  </body>
+</html>
