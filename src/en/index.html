@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>gitcitybanner — GitHub contribution banner</title>
+    <meta
+      name="description"
+      content="Turn the last 365 days of a GitHub profile's contributions into a night-city banner."
+    />
+    <link rel="stylesheet" href="../styles/main.css" />
+  </head>
+  <body>
+    <header class="site-header shell">
+      <h1 class="site-title" data-i18n="title">gitcitybanner</h1>
+      <nav class="lang-switch" aria-label="Language" data-i18n-aria-label="langSwitchLabel">
+        <a href="../" hreflang="pt-BR" data-i18n="langPt">PT</a>
+        <span class="lang-switch__separator" aria-hidden="true">·</span>
+        <span data-i18n="langEn" aria-current="true">EN</span>
+      </nav>
+    </header>
+
+    <main class="site-main shell">
+      <p class="tagline" data-i18n="tagline">
+        Turn the last 365 days of a GitHub profile's contributions into a night-city banner, ready to
+        download as a PNG.
+      </p>
+
+      <div id="app"></div>
+
+      <section id="preview" class="preview" aria-live="polite">
+        <p class="preview__hint" data-i18n="previewEmpty">
+          Your banner shows up here once you generate it.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer shell">
+      <p data-i18n="footer">Open source project. No data is stored.</p>
+    </footer>
+
+    <script type="module" src="../app.ts"></script>
+  </body>
+</html>
