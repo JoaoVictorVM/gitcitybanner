@@ -1,0 +1,133 @@
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  color-scheme: dark;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(180deg, var(--sky) 0%, var(--ground) 100%);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height);
+  display: flex;
+  flex-direction: column;
+}
+
+.shell {
+  width: 100%;
+  max-width: var(--content-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.site-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  align-items: flex-start;
+  padding-top: var(--space-lg);
+  padding-bottom: var(--space-lg);
+  border-bottom: 1px solid var(--border);
+}
+
+.site-title {
+  margin: 0;
+  font-size: var(--font-size-title);
+  letter-spacing: -0.02em;
+}
+
+.lang-switch {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--font-size-sm);
+}
+
+.lang-switch__separator {
+  color: var(--text-muted);
+}
+
+.lang-switch a {
+  color: var(--text-muted);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+}
+
+.lang-switch a:hover,
+.lang-switch a:focus-visible {
+  color: var(--text);
+  border-bottom-color: var(--accent);
+}
+
+.lang-switch [aria-current="true"] {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.site-main {
+  flex: 1;
+  padding-top: var(--space-lg);
+  padding-bottom: var(--space-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.tagline {
+  margin: 0;
+  max-width: 60ch;
+  color: var(--text-muted);
+  font-size: var(--font-size-lg);
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.preview {
+  display: grid;
+  place-items: center;
+  min-height: 200px;
+  padding: var(--space-lg);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  background-color: color-mix(in srgb, var(--building) 60%, transparent);
+}
+
+.preview__hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+  text-align: center;
+}
+
+.site-footer {
+  padding-top: var(--space-md);
+  padding-bottom: var(--space-lg);
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: var(--font-size-sm);
+}
+
+@media (min-width: 768px) {
+  .site-header {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .preview {
+    min-height: 320px;
+  }
+}
