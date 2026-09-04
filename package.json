@@ -1,0 +1,15 @@
+{
+  "name": "gitcitybanner",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "bun src/index.html src/en/index.html",
+    "build": "bun run build.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.2.0",
+    "typescript": "^5.7.0"
+  }
+}
