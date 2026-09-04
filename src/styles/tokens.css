@@ -1,0 +1,31 @@
+:root {
+  --sky: #0b1220;
+  --ground: #060a12;
+  --building: #131c2a;
+  --window-0: #1b2733;
+  --window-1: #4a3b1e;
+  --window-2: #8a6a22;
+  --window-3: #d1a02e;
+  --window-4: #ffd76a;
+
+  --text: #e6ecf5;
+  --text-muted: #93a1b5;
+  --border: #22304a;
+  --accent: var(--window-4);
+
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-size-base: 1rem;
+  --font-size-sm: 0.875rem;
+  --font-size-lg: 1.125rem;
+  --font-size-title: 2rem;
+  --line-height: 1.6;
+
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2.5rem;
+
+  --radius: 8px;
+  --content-width: 960px;
+}
