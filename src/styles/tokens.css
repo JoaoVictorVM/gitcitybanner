@@ -12,6 +12,7 @@
   --text-muted: #93a1b5;
   --border: #22304a;
   --accent: var(--window-4);
+  --error: #ff6b6b;
 
   --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-size-base: 1rem;
