@@ -9,6 +9,10 @@ const ptBR = {
   tagline:
     "Transforme os últimos 365 dias de contribuições de um perfil do GitHub em um banner de cidade noturna, pronto para baixar em PNG.",
   previewEmpty: "O banner aparece aqui depois que você gerar.",
+  usernameLabel: "Nome de usuário do GitHub",
+  usernamePlaceholder: "torvalds",
+  generateButtonLabel: "Gerar banner",
+  invalidUsernameMessage: "Nome de usuário inválido. Use apenas letras, números e hífens.",
   footer: "Projeto open source. Nenhum dado é armazenado.",
   langSwitchLabel: "Idioma",
   langPt: "PT",
@@ -23,6 +27,10 @@ const en: Record<TranslationKey, string> = {
   tagline:
     "Turn the last 365 days of a GitHub profile's contributions into a night-city banner, ready to download as a PNG.",
   previewEmpty: "Your banner shows up here once you generate it.",
+  usernameLabel: "GitHub username",
+  usernamePlaceholder: "torvalds",
+  generateButtonLabel: "Generate banner",
+  invalidUsernameMessage: "Invalid username. Use only letters, numbers, and hyphens.",
   footer: "Open source project. No data is stored.",
   langSwitchLabel: "Language",
   langPt: "PT",
