@@ -1,10 +1,17 @@
-import { afterEach, describe, expect, spyOn, test } from "bun:test";
+import { afterEach, beforeEach, describe, expect, spyOn, test } from "bun:test";
 import handler from "../../api/contributions";
 import { ALLOWED_ORIGIN } from "../../api/_lib/cors";
+import { CACHE_CONTROL_ERROR, CACHE_CONTROL_SUCCESS, clearCache } from "../../api/_lib/cache";
+import { RATE_LIMIT_PER_IP, resetRateLimit } from "../../api/_lib/rateLimit";
 import { buildCalendarHtml } from "./fixture";
 
 const originalFetch = globalThis.fetch;
 const consoleErrors = spyOn(console, "error").mockImplementation(() => {});
+
+beforeEach(() => {
+  clearCache();
+  resetRateLimit();
+});
 
 afterEach(() => {
   globalThis.fetch = originalFetch;
@@ -28,8 +35,8 @@ function stubUpstream(...responses: UpstreamStub[]): { calls: () => number } {
   return { calls: () => call };
 }
 
-function request(query: string, method = "GET"): Request {
-  return new Request(`https://proxy.test/api/contributions${query}`, { method });
+function request(query: string, method = "GET", headers: Record<string, string> = {}): Request {
+  return new Request(`https://proxy.test/api/contributions${query}`, { method, headers });
 }
 
 async function readError(response: Response): Promise<{ code: string; message: string }> {
@@ -143,9 +150,9 @@ describe("GET /api/contributions", () => {
       [{ status: 500 }],
       [{ status: 200, body: "<html><body>broken</body></html>" }],
     ];
-    for (const responses of cases) {
+    for (const [index, responses] of cases.entries()) {
       stubUpstream(...responses);
-      const response = await handler(request("?username=torvalds"));
+      const response = await handler(request(`?username=carrier${index}`));
       expect(response.headers.get("Access-Control-Allow-Origin")).toBe(ALLOWED_ORIGIN);
       expect(response.headers.get("Content-Type")).toBe("application/json");
       await expect(response.json()).resolves.toBeDefined();
@@ -163,5 +170,112 @@ describe("GET /api/contributions", () => {
 
     expect(response.status).toBe(502);
     expect((await readError(response)).code).toBe("UPSTREAM_UNAVAILABLE");
+  });
+});
+
+describe("GET /api/contributions caching and rate limiting", () => {
+  const clientIp = { "x-forwarded-for": "203.0.113.5" };
+
+  test("serves a cached result on the second request without calling upstream", async () => {
+    const upstream = stubUpstream({ status: 200, body: buildCalendarHtml({ countFor: (index) => index % 5 }) });
+
+    const first = await handler(request("?username=torvalds", "GET", clientIp));
+    const second = await handler(request("?username=torvalds", "GET", clientIp));
+
+    expect(first.status).toBe(200);
+    expect(second.status).toBe(200);
+    expect(await first.json()).toEqual(await second.json());
+    expect(upstream.calls()).toBe(1);
+  });
+
+  test("resolves a cached username regardless of the requested casing", async () => {
+    const upstream = stubUpstream({ status: 200, body: buildCalendarHtml() });
+
+    await handler(request("?username=Torvalds", "GET", clientIp));
+    const response = await handler(request("?username=torvalds", "GET", clientIp));
+
+    expect(response.status).toBe(200);
+    expect(upstream.calls()).toBe(1);
+  });
+
+  test("a successful response carries the 30-minute Cache-Control header", async () => {
+    stubUpstream({ status: 200, body: buildCalendarHtml() });
+    const fresh = await handler(request("?username=torvalds", "GET", clientIp));
+    const cached = await handler(request("?username=torvalds", "GET", clientIp));
+
+    expect(fresh.headers.get("Cache-Control")).toBe(CACHE_CONTROL_SUCCESS);
+    expect(cached.headers.get("Cache-Control")).toBe(CACHE_CONTROL_SUCCESS);
+  });
+
+  test("every error response carries Cache-Control: no-store", async () => {
+    const cases: { query: string; stub: UpstreamStub; status: number }[] = [
+      { query: "?username=torv%40lds", stub: { status: 200, body: buildCalendarHtml() }, status: 400 },
+      { query: "?username=nosuchuser", stub: { status: 404 }, status: 404 },
+      { query: "?username=brokenmarkup", stub: { status: 200, body: "<html><body>broken</body></html>" }, status: 422 },
+      { query: "?username=downstream", stub: { status: 500 }, status: 502 },
+    ];
+
+    for (const { query, stub, status } of cases) {
+      stubUpstream(stub);
+      const response = await handler(request(query, "GET", clientIp));
+      expect(response.status).toBe(status);
+      expect(response.headers.get("Cache-Control")).toBe(CACHE_CONTROL_ERROR);
+    }
+  });
+
+  test("the 21st request from the same IP within the window returns 429 RATE_LIMITED", async () => {
+    stubUpstream({ status: 200, body: buildCalendarHtml() });
+
+    for (let index = 0; index < RATE_LIMIT_PER_IP; index += 1) {
+      const allowed = await handler(request(`?username=user${index}`, "GET", clientIp));
+      expect(allowed.status).toBe(200);
+    }
+
+    const blocked = await handler(request("?username=userlast", "GET", clientIp));
+    expect(blocked.status).toBe(429);
+    expect((await readError(blocked)).code).toBe("RATE_LIMITED");
+  });
+
+  test("a 429 response includes a Retry-After header and is never cached", async () => {
+    stubUpstream({ status: 200, body: buildCalendarHtml() });
+    for (let index = 0; index < RATE_LIMIT_PER_IP; index += 1) {
+      await handler(request(`?username=user${index}`, "GET", clientIp));
+    }
+
+    const blocked = await handler(request("?username=userlast", "GET", clientIp));
+    const retryAfter = Number(blocked.headers.get("Retry-After"));
+
+    expect(Number.isInteger(retryAfter)).toBe(true);
+    expect(retryAfter).toBeGreaterThan(0);
+    expect(blocked.headers.get("Cache-Control")).toBe(CACHE_CONTROL_ERROR);
+  });
+
+  test("a cache hit does not count against the rate limit", async () => {
+    const upstream = stubUpstream({ status: 200, body: buildCalendarHtml() });
+
+    for (let index = 0; index < RATE_LIMIT_PER_IP + 5; index += 1) {
+      const response = await handler(request("?username=torvalds", "GET", clientIp));
+      expect(response.status).toBe(200);
+    }
+
+    expect(upstream.calls()).toBe(1);
+  });
+
+  test("a request with a missing x-forwarded-for header is served rather than rejected", async () => {
+    stubUpstream({ status: 200, body: buildCalendarHtml() });
+    const response = await handler(request("?username=torvalds"));
+
+    expect(response.status).toBe(200);
+  });
+
+  test("the raw upstream fetch result flows through caching so a repeated request within 30 minutes skips a new upstream call", async () => {
+    const upstream = stubUpstream({ status: 200, body: buildCalendarHtml({ countFor: (index) => index % 5 }) });
+
+    const first = await handler(request("?username=torvalds", "GET", clientIp));
+    const firstBody = await first.json();
+    const second = await handler(request("?username=torvalds", "GET", clientIp));
+
+    expect(upstream.calls()).toBe(1);
+    expect(await second.json()).toEqual(firstBody);
   });
 });
