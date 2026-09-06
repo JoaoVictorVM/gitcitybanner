@@ -165,6 +165,31 @@ body {
   background-color: var(--window-3);
 }
 
+.username-form__button--pending {
+  position: relative;
+  color: transparent;
+}
+
+.username-form__button--pending::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1rem;
+  height: 1rem;
+  margin: -0.5rem 0 0 -0.5rem;
+  border: 2px solid color-mix(in srgb, var(--text-muted) 35%, transparent);
+  border-top-color: var(--text-muted);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .username-form__error {
   margin: 0;
   min-height: calc(var(--font-size-sm) * var(--line-height));
@@ -182,6 +207,25 @@ body {
   background-color: color-mix(in srgb, var(--building) 60%, transparent);
 }
 
+.preview--pending {
+  aspect-ratio: 3 / 1;
+  min-height: 0;
+  padding: 0;
+  border-style: solid;
+  background-color: color-mix(in srgb, var(--building) 85%, transparent);
+  animation: pulse 1.2s ease-in-out infinite alternate;
+}
+
+.preview--pending .preview__hint {
+  visibility: hidden;
+}
+
+@keyframes pulse {
+  to {
+    background-color: color-mix(in srgb, var(--building) 45%, transparent);
+  }
+}
+
 .preview__hint {
   margin: 0;
   color: var(--text-muted);
@@ -195,6 +239,16 @@ body {
   border-top: 1px solid var(--border);
   color: var(--text-muted);
   font-size: var(--font-size-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .username-form__button--pending::after {
+    animation-duration: 2.4s;
+  }
+
+  .preview--pending {
+    animation: none;
+  }
 }
 
 @media (min-width: 768px) {
