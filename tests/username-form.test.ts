@@ -1,6 +1,6 @@
-import { GlobalRegistrator } from "@happy-dom/global-registrator";
+import { registerDom } from "./dom";
 
-GlobalRegistrator.register();
+registerDom();
 
 const { describe, expect, test, beforeEach, mock } = await import("bun:test");
 const { mountUsernameForm } = await import("../src/username-form");
