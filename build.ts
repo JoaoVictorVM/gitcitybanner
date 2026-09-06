@@ -1,6 +1,8 @@
 import { rm, mkdir } from "node:fs/promises";
 import { posix, dirname } from "node:path";
 
+import { LOCAL_API_BASE_URL } from "./src/config";
+
 const BASE_PATH = "/gitcitybanner/";
 const SRC_DIR = "src";
 const OUT_DIR = "dist";
@@ -8,6 +10,8 @@ const OUT_DIR = "dist";
 const HTML_ENTRIES = ["index.html", "en/index.html"];
 const SCRIPT_ENTRY = `${SRC_DIR}/app.ts`;
 const STYLE_ENTRY = `${SRC_DIR}/styles/main.css`;
+
+const API_BASE_URL = process.env.PROD_API_URL || LOCAL_API_BASE_URL;
 
 function typecheck(): void {
   const result = Bun.spawnSync(["bun", "x", "tsc", "--noEmit"], {
@@ -38,6 +42,9 @@ async function buildScript(): Promise<void> {
     target: "browser",
     format: "esm",
     minify: true,
+    define: {
+      __PRODUCTION_API_BASE_URL__: JSON.stringify(API_BASE_URL),
+    },
   });
   if (!result.success) {
     for (const log of result.logs) console.error(log);
@@ -73,4 +80,4 @@ await buildScript();
 await buildStyles();
 await buildHtml();
 
-console.log(`[build] wrote ${OUT_DIR}/ with base path ${BASE_PATH}`);
+console.log(`[build] wrote ${OUT_DIR}/ with base path ${BASE_PATH} and api base url ${API_BASE_URL}`);
