@@ -1,6 +1,6 @@
 import { PRODUCTION_API_BASE_URL } from "./config";
 import { getLocale, t } from "./i18n/locale";
-import { mountUsernameForm } from "./username-form";
+import { mountContributionRetrieval } from "./contributions/bootstrap";
 import { isLocale } from "./i18n/translations";
 import type { TranslationKey } from "./i18n/translations";
 
@@ -38,7 +38,7 @@ export function bootstrap(): Shell | null {
   document.documentElement.dataset.apiBaseUrl = PRODUCTION_API_BASE_URL;
   applyTranslations();
   const shell = getShell();
-  if (shell) mountUsernameForm(shell);
+  if (shell) mountContributionRetrieval(shell);
   return shell;
 }
 
