@@ -3,11 +3,18 @@ import { existsSync } from "node:fs";
 import { rm } from "node:fs/promises";
 import { join } from "node:path";
 
+import { LOCAL_API_BASE_URL, PRODUCTION_API_BASE_URL } from "../src/config";
+
 const ROOT = join(import.meta.dir, "..");
 const DIST = join(ROOT, "dist");
 
-function runBuild() {
-  return Bun.spawnSync(["bun", "run", "build.ts"], { cwd: ROOT, stdout: "pipe", stderr: "pipe" });
+function runBuild(env: Record<string, string | undefined> = {}) {
+  return Bun.spawnSync(["bun", "run", "build.ts"], {
+    cwd: ROOT,
+    stdout: "pipe",
+    stderr: "pipe",
+    env: { ...process.env, PROD_API_URL: undefined, ...env },
+  });
 }
 
 describe("production build", () => {
@@ -61,5 +68,33 @@ describe("type safety", () => {
     expect(result.exitCode).not.toBe(0);
     // The previous successful output survives, so a broken bundle is never published.
     expect(existsSync(join(DIST, "index.html"))).toBe(true);
+  });
+});
+
+describe("production api base url", () => {
+  test("exposes a single non-empty string constant", () => {
+    expect(typeof PRODUCTION_API_BASE_URL).toBe("string");
+    expect(PRODUCTION_API_BASE_URL.length).toBeGreaterThan(0);
+  });
+
+  test("inlines PROD_API_URL as a literal in the bundle", async () => {
+    const url = "https://gitcitybanner.vercel.app";
+    const result = runBuild({ PROD_API_URL: url });
+    expect(result.exitCode).toBe(0);
+
+    const bundle = await Bun.file(join(DIST, "app.js")).text();
+    expect(bundle).toContain(url);
+    expect(bundle).not.toContain("__PRODUCTION_API_BASE_URL__");
+    expect(bundle).not.toContain("process.env");
+    expect(bundle).not.toContain("import.meta.env");
+  });
+
+  test("falls back to the local base url when PROD_API_URL is unset", async () => {
+    const result = runBuild();
+    expect(result.exitCode).toBe(0);
+
+    const bundle = await Bun.file(join(DIST, "app.js")).text();
+    expect(bundle).toContain(LOCAL_API_BASE_URL);
+    expect(bundle).not.toContain("undefined");
   });
 });
