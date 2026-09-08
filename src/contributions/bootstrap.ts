@@ -2,16 +2,18 @@ import type { Shell } from "../app";
 import { getLocale } from "../i18n/locale";
 import { mountUsernameForm } from "../username-form";
 import { createContributionController } from "./controller";
+import type { ContributionResultHandler } from "./controller";
 import { attachFormControls } from "./form-controls";
 import { renderPreview } from "./preview";
 
-export function mountContributionRetrieval(shell: Shell): void {
+export function mountContributionRetrieval(shell: Shell, onResult?: ContributionResultHandler): void {
   let submit: ((username: string) => void) | null = null;
 
   const form = mountUsernameForm(shell, (username) => submit?.(username));
-  const controller = createContributionController(shell, attachFormControls(form), (model) =>
-    renderPreview(shell, model, getLocale()),
-  );
+  const controller = createContributionController(shell, attachFormControls(form), (model) => {
+    renderPreview(shell, model, getLocale());
+    onResult?.(model);
+  });
 
   submit = controller.handleUsernameSubmit;
 }
