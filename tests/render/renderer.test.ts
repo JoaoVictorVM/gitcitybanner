@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, test } from "bun:test";
 
 import type { ContributionModel } from "../../src/contributions/types";
+import { computeCityLayout } from "../../src/layout/compute-layout";
 import type { CanvasDimensions } from "../../src/layout/types";
 import { formatCaptionText, formatFooterText } from "../../src/render/captions";
 import { resolveRenderConstants } from "../../src/render/constants";
@@ -37,6 +38,18 @@ function texts(calls: DrawCall[]): DrawCall[] {
   return calls.filter((call) => call.method === "fillText");
 }
 
+function chimneyRects(rects: DrawCall[]): DrawCall[] {
+  return rects.slice(2, 14);
+}
+
+function buildingRects(rects: DrawCall[]): DrawCall[] {
+  return rects.slice(14, 26);
+}
+
+function windowRects(rects: DrawCall[]): DrawCall[] {
+  return rects.slice(26);
+}
+
 afterEach(() => {
   delete (globalThis as { devicePixelRatio?: number }).devicePixelRatio;
 });
@@ -61,19 +74,18 @@ describe("renderBanner", () => {
     expect(renderBanner(canvas, busyModel(), X_CANVAS, "pt-BR")).toBe(canvas);
   });
 
-  test("draws sky, ground, buildings, windows, then captions in that order", () => {
+  test("draws sky, ground, chimneys, roofs, buildings, windows, then captions in that order", () => {
     const { canvas, calls } = createRecordingCanvas();
     renderBanner(canvas, busyModel(), X_CANVAS, "pt-BR");
 
     const rects = fillRects(calls);
     expect(rects[0]?.args).toEqual([0, 0, 1500, 500]);
-    expect(rects[1]?.args[1]).toBe(460);
+    expect(rects[1]?.args[1]).toBe(360);
 
-    const buildingRects = rects.slice(2, 55);
-    const windowRects = rects.slice(55);
     const palette = resolvePalette();
-    expect(buildingRects.every((call) => call.fillStyle === palette.building)).toBe(true);
-    expect(windowRects.every((call) => palette.windows.includes(call.fillStyle))).toBe(true);
+    expect(chimneyRects(rects).every((call) => call.fillStyle === palette.roof)).toBe(true);
+    expect(buildingRects(rects).every((call) => call.fillStyle === palette.building)).toBe(true);
+    expect(windowRects(rects).every((call) => palette.windows.includes(call.fillStyle))).toBe(true);
 
     const lastRectIndex = calls.lastIndexOf(rects[rects.length - 1]!);
     const firstTextIndex = calls.indexOf(texts(calls)[0]!);
@@ -81,25 +93,68 @@ describe("renderBanner", () => {
     expect(texts(calls)).toHaveLength(2);
   });
 
-  test("draws exactly 53 building and 371 window rectangles", () => {
+  test("draws one roof triangle per building, each under the body rectangle", () => {
+    const { canvas, calls } = createRecordingCanvas();
+    renderBanner(canvas, busyModel(), X_CANVAS, "pt-BR");
+
+    const palette = resolvePalette();
+    const fills = calls.filter((call) => call.method === "fill");
+
+    expect(calls.filter((call) => call.method === "beginPath")).toHaveLength(12);
+    expect(calls.filter((call) => call.method === "moveTo")).toHaveLength(12);
+    expect(calls.filter((call) => call.method === "lineTo")).toHaveLength(24);
+    expect(calls.filter((call) => call.method === "closePath")).toHaveLength(12);
+    expect(fills).toHaveLength(12);
+    expect(fills.every((call) => call.fillStyle === palette.roof)).toBe(true);
+
+    const lastRoofIndex = calls.lastIndexOf(fills[11]!);
+    const firstBodyIndex = calls.indexOf(buildingRects(fillRects(calls))[0]!);
+    expect(firstBodyIndex).toBeGreaterThan(lastRoofIndex);
+  });
+
+  test("the roof of a building matches its layout geometry", () => {
+    const { canvas, calls } = createRecordingCanvas();
+    const model = busyModel();
+    renderBanner(canvas, model, X_CANVAS, "pt-BR");
+
+    const { roof, chimney } = computeCityLayout(model, X_CANVAS).buildings[0]!;
+    const moveTo = calls.find((call) => call.method === "moveTo")!;
+    const lineTos = calls.filter((call) => call.method === "lineTo").slice(0, 2);
+
+    expect(moveTo.args).toEqual([roof.left.x, roof.left.y]);
+    expect(lineTos[0]?.args).toEqual([roof.apex.x, roof.apex.y]);
+    expect(lineTos[1]?.args).toEqual([roof.right.x, roof.right.y]);
+    expect(chimneyRects(fillRects(calls))[0]?.args).toEqual([
+      chimney.x,
+      chimney.y,
+      chimney.width,
+      chimney.height,
+    ]);
+  });
+
+  test("draws exactly 12 chimney, 12 building and 420 window rectangles", () => {
     const { canvas, calls } = createRecordingCanvas();
     renderBanner(canvas, busyModel(), X_CANVAS, "pt-BR");
 
     const rects = fillRects(calls);
-    expect(rects).toHaveLength(2 + 53 + 371);
+    expect(rects).toHaveLength(2 + 12 + 12 + 420);
   });
 
   test("draws level-zero windows instead of skipping them", () => {
     const { canvas, calls } = createRecordingCanvas();
     const model = busyModel();
-    model.weeks[0] = { days: model.weeks[0]!.days.map((day) => ({ ...day, count: 0, level: 0 })) };
+    model.weeks[20] = {
+      days: model.weeks[20]!.days.map((day) => ({ ...day, count: 0, level: 0 })),
+    };
 
     renderBanner(canvas, model, X_CANVAS, "pt-BR");
 
     const palette = resolvePalette();
-    const windowRects = fillRects(calls).slice(55);
-    expect(windowRects.filter((call) => call.fillStyle === palette.windows[0]).length).toBeGreaterThanOrEqual(7);
-    expect(windowRects).toHaveLength(371);
+    const windows = windowRects(fillRects(calls));
+    expect(
+      windows.filter((call) => call.fillStyle === palette.windows[0]).length,
+    ).toBeGreaterThanOrEqual(7);
+    expect(windows).toHaveLength(420);
   });
 
   test("fills each window with the palette entry for its level", () => {
@@ -108,9 +163,13 @@ describe("renderBanner", () => {
     renderBanner(canvas, model, X_CANVAS, "pt-BR");
 
     const palette = resolvePalette();
-    const expectedLevels = model.weeks.flatMap((week) => week.days.map((day) => day.level));
-    const windowRects = fillRects(calls).slice(55);
-    expect(windowRects.map((call) => call.fillStyle)).toEqual(
+    const expectedLevels = computeCityLayout(model, X_CANVAS).buildings.flatMap((building) =>
+      building.windows.map((window) => window.level),
+    );
+    const windows = windowRects(fillRects(calls));
+
+    expect(expectedLevels).toHaveLength(420);
+    expect(windows.map((call) => call.fillStyle)).toEqual(
       expectedLevels.map((level) => palette.windows[level]!),
     );
   });

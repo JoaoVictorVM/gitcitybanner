@@ -1,30 +1,51 @@
 import type { CanvasDimensions } from "./types";
 
 export interface LayoutConstants {
-  padding: number;
   gap: number;
   buildingWidth: number;
-  minHeight: number;
-  maxHeight: number;
+  gridInset: number;
+  gridTopMargin: number;
+  gridBottomMargin: number;
+  windowGutter: number;
+  base: number;
   groundLine: number;
+  roofHeight: number;
+  roofOverhang: number;
+  chimneyWidth: number;
+  chimneyHeight: number;
+  chimneyInset: number;
 }
 
 export const LAYOUT_CONSTANTS: Record<string, LayoutConstants> = {
   "1500x500": {
-    padding: 60,
-    gap: 6,
-    buildingWidth: 20,
-    minHeight: 40,
-    maxHeight: 380,
-    groundLine: 40,
+    gap: 26,
+    buildingWidth: 96,
+    gridInset: 8,
+    gridTopMargin: 12,
+    gridBottomMargin: 12,
+    windowGutter: 3,
+    base: 36,
+    groundLine: 140,
+    roofHeight: 36,
+    roofOverhang: 9,
+    chimneyWidth: 9,
+    chimneyHeight: 32,
+    chimneyInset: 18,
   },
   "1584x396": {
-    padding: 64,
-    gap: 6,
-    buildingWidth: 21,
-    minHeight: 32,
-    maxHeight: 290,
-    groundLine: 34,
+    gap: 26,
+    buildingWidth: 100,
+    gridInset: 10,
+    gridTopMargin: 10,
+    gridBottomMargin: 10,
+    windowGutter: 3,
+    base: 28,
+    groundLine: 96,
+    roofHeight: 32,
+    roofOverhang: 8,
+    chimneyWidth: 8,
+    chimneyHeight: 28,
+    chimneyInset: 16,
   },
 };
 
