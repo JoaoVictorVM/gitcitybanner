@@ -17,6 +17,11 @@ const ptBR = {
   errorRateLimited: "Muitas gerações em pouco tempo. Tente de novo em {minutes} minutos.",
   errorServiceUnavailable: "Não foi possível ler os dados do GitHub agora. Tente de novo mais tarde.",
   errorConnectionFailed: "A conexão falhou. Verifique sua internet e tente de novo.",
+  downloadXLabel: "Baixar para X (1500×500)",
+  downloadLinkedInLabel: "Baixar para LinkedIn (1584×396)",
+  errorExportFailed: "Não foi possível gerar o arquivo. Tente de novo.",
+  errorDownloadBlocked:
+    "Seu navegador bloqueou o download. Permita downloads deste site e tente de novo.",
   previewDescription: "Banner da cidade de @{username} com {count} contribuições",
   bannerCaption: "@{username} · {count} contribuições",
   footer: "Projeto open source. Nenhum dado é armazenado.",
@@ -41,6 +46,11 @@ const en: Record<TranslationKey, string> = {
   errorRateLimited: "Too many generations in a short time. Try again in {minutes} minutes.",
   errorServiceUnavailable: "Could not read data from GitHub right now. Please try again later.",
   errorConnectionFailed: "The connection failed. Check your internet and try again.",
+  downloadXLabel: "Download for X (1500×500)",
+  downloadLinkedInLabel: "Download for LinkedIn (1584×396)",
+  errorExportFailed: "Could not generate the file. Please try again.",
+  errorDownloadBlocked:
+    "Your browser blocked the download. Allow downloads from this site and try again.",
   previewDescription: "City banner for @{username} with {count} contributions",
   bannerCaption: "@{username} · {count} contributions",
   footer: "Open source project. No data is stored.",
