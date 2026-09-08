@@ -40,6 +40,11 @@ function buildShell(locale: "pt-BR" | "en"): Shell {
     textAlign: "start",
     textBaseline: "alphabetic",
     fillRect: () => {},
+    beginPath: () => {},
+    moveTo: () => {},
+    lineTo: () => {},
+    closePath: () => {},
+    fill: () => {},
     fillText: () => {},
   } as unknown as CanvasRenderingContext2D);
   return {

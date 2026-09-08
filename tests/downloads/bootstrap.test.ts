@@ -83,6 +83,11 @@ describe("download buttons bootstrap", () => {
       textAlign: "start",
       textBaseline: "alphabetic",
       fillRect: () => {},
+      beginPath: () => {},
+      moveTo: () => {},
+      lineTo: () => {},
+      closePath: () => {},
+      fill: () => {},
       fillText: () => {},
     } as unknown as CanvasRenderingContext2D);
 

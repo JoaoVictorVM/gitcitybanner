@@ -29,6 +29,11 @@ function stubContext(canvas: HTMLCanvasElement, texts: string[]): void {
     textAlign: "start",
     textBaseline: "alphabetic",
     fillRect: () => {},
+    beginPath: () => {},
+    moveTo: () => {},
+    lineTo: () => {},
+    closePath: () => {},
+    fill: () => {},
     fillText: (text: string) => {
       texts.push(text);
     },

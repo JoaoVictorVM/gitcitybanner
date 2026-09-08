@@ -27,6 +27,11 @@ function stubContext(): CanvasRenderingContext2D {
     textAlign: "start",
     textBaseline: "alphabetic",
     fillRect: () => {},
+    beginPath: () => {},
+    moveTo: () => {},
+    lineTo: () => {},
+    closePath: () => {},
+    fill: () => {},
     fillText: () => {},
   } as unknown as CanvasRenderingContext2D;
 }

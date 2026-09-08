@@ -1,7 +1,17 @@
 import { spyOn } from "bun:test";
 
 export interface DrawCall {
-  method: "fillRect" | "fillText" | "strokeRect" | "drawImage" | "arc";
+  method:
+    | "fillRect"
+    | "fillText"
+    | "strokeRect"
+    | "drawImage"
+    | "arc"
+    | "beginPath"
+    | "moveTo"
+    | "lineTo"
+    | "closePath"
+    | "fill";
   args: unknown[];
   fillStyle: string;
   font: string;
@@ -54,6 +64,11 @@ export function createRecordingCanvas(): RecordingCanvas {
     strokeRect: record("strokeRect"),
     drawImage: record("drawImage"),
     arc: record("arc"),
+    beginPath: record("beginPath"),
+    moveTo: record("moveTo"),
+    lineTo: record("lineTo"),
+    closePath: record("closePath"),
+    fill: record("fill"),
   };
 
   const canvas = document.createElement("canvas");
