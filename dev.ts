@@ -1,3 +1,4 @@
+import contributions from "./api/contributions";
 import home from "./src/index.html";
 import en from "./src/en/index.html";
 
@@ -10,6 +11,7 @@ const server = Bun.serve({
     "/en": en,
     "/en/": en,
     "/en/index.html": en,
+    "/api/contributions": contributions,
   },
 });
 
