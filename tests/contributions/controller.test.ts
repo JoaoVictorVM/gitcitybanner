@@ -18,7 +18,7 @@ const SHELL_MARKUP =
   '<div id="app"></div><section id="preview" class="preview">' +
   '<p class="preview__hint"></p>' +
   '<canvas class="preview__canvas" width="1500" height="500" hidden></canvas>' +
-  '<div class="preview__actions" hidden></div>' +
+  '<div id="downloads" class="preview__actions" hidden></div>' +
   "</section>";
 
 interface Harness {
@@ -45,6 +45,7 @@ function buildShell(locale: "pt-BR" | "en"): Shell {
   return {
     root: document.getElementById("app")!,
     preview: document.getElementById("preview")!,
+    downloads: document.getElementById("downloads")!,
   };
 }
 

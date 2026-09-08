@@ -1,12 +1,14 @@
 import { PRODUCTION_API_BASE_URL } from "./config";
 import { getLocale, t } from "./i18n/locale";
 import { mountContributionRetrieval } from "./contributions/bootstrap";
+import { mountDownloadButtons } from "./downloads/bootstrap";
 import { isLocale } from "./i18n/translations";
 import type { TranslationKey } from "./i18n/translations";
 
 export interface Shell {
   root: HTMLElement;
   preview: HTMLElement;
+  downloads: HTMLElement;
 }
 
 function applyTranslations(root: ParentNode = document): void {
@@ -27,8 +29,9 @@ function applyTranslations(root: ParentNode = document): void {
 function getShell(): Shell | null {
   const root = document.getElementById("app");
   const preview = document.getElementById("preview");
-  if (!root || !preview) return null;
-  return { root, preview };
+  const downloads = document.getElementById("downloads");
+  if (!root || !preview || !downloads) return null;
+  return { root, preview, downloads };
 }
 
 export function bootstrap(): Shell | null {
@@ -38,7 +41,10 @@ export function bootstrap(): Shell | null {
   document.documentElement.dataset.apiBaseUrl = PRODUCTION_API_BASE_URL;
   applyTranslations();
   const shell = getShell();
-  if (shell) mountContributionRetrieval(shell);
+  if (shell) {
+    const downloads = mountDownloadButtons(shell);
+    mountContributionRetrieval(shell, downloads.onBannerReady);
+  }
   return shell;
 }
 

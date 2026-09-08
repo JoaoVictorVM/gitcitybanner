@@ -19,7 +19,7 @@ interface Harness {
 const PREVIEW_MARKUP = `
   <p class="preview__hint">O banner aparece aqui depois que você gerar.</p>
   <canvas class="preview__canvas" width="1500" height="500" hidden></canvas>
-  <div class="preview__actions" hidden></div>
+  <div id="downloads" class="preview__actions" hidden></div>
 `;
 
 function stubContext(canvas: HTMLCanvasElement, texts: string[]): void {
@@ -45,7 +45,11 @@ function harness(locale: Locale = "pt-BR", markup: string = PREVIEW_MARKUP): Har
   if (canvas) stubContext(canvas, texts);
 
   return {
-    shell: { root: document.getElementById("app")!, preview },
+    shell: {
+      root: document.getElementById("app")!,
+      preview,
+      downloads: preview.querySelector<HTMLElement>(".preview__actions") ?? preview,
+    },
     canvas,
     actions: preview.querySelector<HTMLElement>(".preview__actions")!,
     hint: preview.querySelector<HTMLElement>(".preview__hint")!,

@@ -16,10 +16,11 @@ interface Mounted {
 
 function mount(): Mounted {
   document.documentElement.lang = "pt-BR";
-  document.body.innerHTML = `<div id="app"></div><section id="preview"></section>`;
+  document.body.innerHTML = `<div id="app"></div><section id="preview"></section><div id="downloads"></div>`;
   const shell: Shell = {
     root: document.getElementById("app")!,
     preview: document.getElementById("preview")!,
+    downloads: document.getElementById("downloads")!,
   };
   const form = mountUsernameForm(shell, () => {});
   return {

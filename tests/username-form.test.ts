@@ -18,10 +18,11 @@ interface Mounted {
 
 function mount(locale: Locale = "pt-BR"): Mounted {
   document.documentElement.lang = locale;
-  document.body.innerHTML = `<div id="app"></div><section id="preview"></section>`;
+  document.body.innerHTML = `<div id="app"></div><section id="preview"></section><div id="downloads"></div>`;
   const shell: Shell = {
     root: document.getElementById("app")!,
     preview: document.getElementById("preview")!,
+    downloads: document.getElementById("downloads")!,
   };
   const onValidUsername = mock(() => {});
   const form = mountUsernameForm(shell, onValidUsername);
