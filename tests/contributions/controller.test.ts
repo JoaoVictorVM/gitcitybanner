@@ -2,7 +2,7 @@ import { registerDom } from "../dom";
 
 registerDom();
 
-const { afterEach, beforeEach, describe, expect, mock, test } = await import("bun:test");
+const { afterEach, beforeEach, describe, expect, mock, spyOn, test } = await import("bun:test");
 const { mountUsernameForm } = await import("../../src/username-form");
 const { attachFormControls } = await import("../../src/contributions/form-controls");
 const { createContributionController } = await import("../../src/contributions/controller");
@@ -14,7 +14,12 @@ import type { ContributionModel } from "../../src/contributions/types";
 import { buildModel } from "./fixture";
 
 const originalFetch = globalThis.fetch;
-const SHELL_MARKUP = '<div id="app"></div><section id="preview" class="preview"></section>';
+const SHELL_MARKUP =
+  '<div id="app"></div><section id="preview" class="preview">' +
+  '<p class="preview__hint"></p>' +
+  '<canvas class="preview__canvas" width="1500" height="500" hidden></canvas>' +
+  '<div class="preview__actions" hidden></div>' +
+  "</section>";
 
 interface Harness {
   shell: Shell;
@@ -28,6 +33,15 @@ interface Harness {
 function buildShell(locale: "pt-BR" | "en"): Shell {
   document.documentElement.lang = locale;
   document.body.innerHTML = SHELL_MARKUP;
+  const canvas = document.querySelector<HTMLCanvasElement>(".preview__canvas")!;
+  spyOn(canvas, "getContext").mockReturnValue({
+    fillStyle: "",
+    font: "",
+    textAlign: "start",
+    textBaseline: "alphabetic",
+    fillRect: () => {},
+    fillText: () => {},
+  } as unknown as CanvasRenderingContext2D);
   return {
     root: document.getElementById("app")!,
     preview: document.getElementById("preview")!,
