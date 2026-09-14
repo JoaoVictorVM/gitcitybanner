@@ -1,4 +1,5 @@
 {
   "installCommand": "curl -fsSL https://bun.sh/install | bash -s bun-v1.4.1 && ~/.bun/bin/bun install --frozen-lockfile",
-  "buildCommand": "~/.bun/bin/bun run typecheck"
+  "buildCommand": "~/.bun/bin/bun run typecheck && mkdir -p public",
+  "outputDirectory": "public"
 }
