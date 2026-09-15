@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, spyOn, test } from "bun:test";
-import handler from "../../api/contributions";
+import vercelEntry, { handler } from "../../api/contributions";
 import { CACHE_CONTROL_ERROR, CACHE_CONTROL_SUCCESS, clearCache } from "../../api/_lib/cache";
 import { RATE_LIMIT_PER_IP, resetRateLimit } from "../../api/_lib/rateLimit";
 import { buildCalendarHtml } from "./fixture";
@@ -150,6 +150,10 @@ describe("GET /api/contributions", () => {
     stubUpstream({ status: 200, body: buildCalendarHtml() });
     const invalid = await handler(request("?username=-bad-"));
     expect(invalid.headers.get("Content-Type")).toBe("application/json");
+  });
+
+  test("exposes the handler through the fetch export the Vercel runtime expects", () => {
+    expect(vercelEntry).toEqual({ fetch: handler });
   });
 
   test("maps an unhandled exception to 502 UPSTREAM_UNAVAILABLE", async () => {

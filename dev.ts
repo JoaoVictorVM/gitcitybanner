@@ -1,4 +1,4 @@
-import contributions from "./api/contributions";
+import { handler as contributions } from "./api/contributions";
 import home from "./src/index.html";
 import en from "./src/en/index.html";
 

@@ -23,7 +23,7 @@ function fail(code: ErrorCode, headers: Record<string, string> = {}): Response {
   return jsonResponse(status, body, { "Cache-Control": CACHE_CONTROL_ERROR, ...headers });
 }
 
-export default async function handler(request: Request): Promise<Response> {
+export async function handler(request: Request): Promise<Response> {
   try {
     const username = new URL(request.url).searchParams.get("username") ?? "";
     if (!isValidUsername(username)) return fail("INVALID_USERNAME");
@@ -54,3 +54,5 @@ export default async function handler(request: Request): Promise<Response> {
     return fail("UPSTREAM_UNAVAILABLE");
   }
 }
+
+export default { fetch: handler };
