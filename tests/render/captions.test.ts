@@ -23,7 +23,7 @@ describe("formatCaptionText", () => {
 
 describe("formatFooterText", () => {
   test("points at the deployed site domain", () => {
-    expect(formatFooterText()).toBe("joaovictorvm.github.io/gitcitybanner");
+    expect(formatFooterText()).toBe("gitcitybanner.vercel.app");
   });
 });
 

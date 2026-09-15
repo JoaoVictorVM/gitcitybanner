@@ -13,5 +13,5 @@ export function formatCaptionText(username: string, total: number, locale: Local
 }
 
 export function formatFooterText(): string {
-  return `${SITE_DOMAIN}/gitcitybanner`;
+  return SITE_DOMAIN;
 }

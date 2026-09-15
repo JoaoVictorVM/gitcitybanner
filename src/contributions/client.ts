@@ -1,4 +1,3 @@
-import { PRODUCTION_API_BASE_URL } from "../config";
 import { ContributionFetchError, isContributionErrorCode } from "./types";
 import type { ContributionErrorCode, ContributionModel, Day, Week } from "./types";
 
@@ -16,10 +15,10 @@ const CODE_BY_STATUS: Record<number, ContributionErrorCode> = {
   502: "UPSTREAM_UNAVAILABLE",
 };
 
+const API_PATH = "/api/contributions";
+
 function buildUrl(username: string): string {
-  const url = new URL("/api/contributions", PRODUCTION_API_BASE_URL);
-  url.searchParams.set("username", username);
-  return url.toString();
+  return `${API_PATH}?${new URLSearchParams({ username })}`;
 }
 
 function readRetryAfterSeconds(response: Response): number {

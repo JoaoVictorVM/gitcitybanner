@@ -1,6 +1,5 @@
 import { afterEach, describe, expect, mock, test } from "bun:test";
 
-import { PRODUCTION_API_BASE_URL } from "../../src/config";
 import { fetchContributions } from "../../src/contributions/client";
 import { ContributionFetchError } from "../../src/contributions/types";
 import { buildModel } from "./fixture";
@@ -36,13 +35,11 @@ async function expectCode(promise: Promise<unknown>, code: string): Promise<Cont
 }
 
 describe("fetchContributions", () => {
-  test("builds the request against the production base url", async () => {
+  test("builds a same-origin request to the api path", async () => {
     const spy = stubFetch(jsonResponse(200, buildModel()));
     await fetchContributions("torvalds", new AbortController().signal);
 
-    expect(String(spy.mock.calls[0]![0])).toBe(
-      `${PRODUCTION_API_BASE_URL}/api/contributions?username=torvalds`,
-    );
+    expect(String(spy.mock.calls[0]![0])).toBe("/api/contributions?username=torvalds");
   });
 
   test("resolves the model on a 200 with 53 weeks", async () => {

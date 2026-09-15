@@ -1,4 +1,3 @@
-import { PRODUCTION_API_BASE_URL } from "./config";
 import { getLocale, t } from "./i18n/locale";
 import { mountContributionRetrieval } from "./contributions/bootstrap";
 import { mountDownloadButtons } from "./downloads/bootstrap";
@@ -38,7 +37,6 @@ export function bootstrap(): Shell | null {
   if (!isLocale(document.documentElement.lang)) {
     console.warn(`[gitcitybanner] unknown lang "${document.documentElement.lang}", falling back to default locale`);
   }
-  document.documentElement.dataset.apiBaseUrl = PRODUCTION_API_BASE_URL;
   applyTranslations();
   const shell = getShell();
   if (shell) {

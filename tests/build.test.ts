@@ -3,8 +3,6 @@ import { existsSync } from "node:fs";
 import { rm } from "node:fs/promises";
 import { join } from "node:path";
 
-import { LOCAL_API_BASE_URL, PRODUCTION_API_BASE_URL } from "../src/config";
-
 const ROOT = join(import.meta.dir, "..");
 const DIST = join(ROOT, "dist");
 
@@ -13,7 +11,7 @@ function runBuild(env: Record<string, string | undefined> = {}) {
     cwd: ROOT,
     stdout: "pipe",
     stderr: "pipe",
-    env: { ...process.env, PROD_API_URL: undefined, ...env },
+    env: { ...process.env, ...env },
   });
 }
 
@@ -32,13 +30,15 @@ describe("production build", () => {
     expect(existsSync(join(DIST, "styles", "main.css"))).toBe(true);
   });
 
-  test("emits no root-absolute asset references", async () => {
+  test("rewrites every relative asset reference to the site root", async () => {
     for (const entry of ["index.html", "en/index.html"]) {
       const html = await Bun.file(join(DIST, entry)).text();
-      const offenders = [...html.matchAll(/\s(?:href|src)="(\/[^"]*)"/g)]
-        .map((match) => match[1]!)
-        .filter((value) => !value.startsWith("/gitcitybanner/"));
+      const offenders = [...html.matchAll(/\s(?:href|src)="(\.{1,2}\/[^"]*)"/g)].map(
+        (match) => match[1]!,
+      );
       expect(offenders, entry).toEqual([]);
+      expect(html).toContain('src="/app.js"');
+      expect(html).toContain('href="/styles/main.css"');
     }
   });
 
@@ -47,9 +47,9 @@ describe("production build", () => {
     expect(await Bun.file(join(DIST, "en", "index.html")).text()).toContain('<html lang="en">');
   });
 
-  test("rewrites the language selector links to the base path", async () => {
-    expect(await Bun.file(join(DIST, "index.html")).text()).toContain('href="/gitcitybanner/en/"');
-    expect(await Bun.file(join(DIST, "en", "index.html")).text()).toContain('href="/gitcitybanner/"');
+  test("rewrites the language selector links to the site root", async () => {
+    expect(await Bun.file(join(DIST, "index.html")).text()).toContain('href="/en/"');
+    expect(await Bun.file(join(DIST, "en", "index.html")).text()).toContain('href="/"');
   });
 });
 
@@ -71,30 +71,13 @@ describe("type safety", () => {
   });
 });
 
-describe("production api base url", () => {
-  test("exposes a single non-empty string constant", () => {
-    expect(typeof PRODUCTION_API_BASE_URL).toBe("string");
-    expect(PRODUCTION_API_BASE_URL.length).toBeGreaterThan(0);
-  });
-
-  test("inlines PROD_API_URL as a literal in the bundle", async () => {
-    const url = "https://gitcitybanner.vercel.app";
-    const result = runBuild({ PROD_API_URL: url });
-    expect(result.exitCode).toBe(0);
-
+describe("api base url", () => {
+  test("the bundle calls the api on the same origin with no build-time url", async () => {
     const bundle = await Bun.file(join(DIST, "app.js")).text();
-    expect(bundle).toContain(url);
+    expect(bundle).toContain("/api/contributions");
+    expect(bundle).not.toContain("localhost:3000");
     expect(bundle).not.toContain("__PRODUCTION_API_BASE_URL__");
     expect(bundle).not.toContain("process.env");
     expect(bundle).not.toContain("import.meta.env");
-  });
-
-  test("falls back to the local base url when PROD_API_URL is unset", async () => {
-    const result = runBuild();
-    expect(result.exitCode).toBe(0);
-
-    const bundle = await Bun.file(join(DIST, "app.js")).text();
-    expect(bundle).toContain(LOCAL_API_BASE_URL);
-    expect(bundle).not.toContain("undefined");
   });
 });
