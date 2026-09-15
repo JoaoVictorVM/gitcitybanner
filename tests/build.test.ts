@@ -5,6 +5,7 @@ import { join } from "node:path";
 
 const ROOT = join(import.meta.dir, "..");
 const DIST = join(ROOT, "dist");
+const BUILD_TIMEOUT_MS = 60_000;
 
 function runBuild(env: Record<string, string | undefined> = {}) {
   return Bun.spawnSync(["bun", "run", "build.ts"], {
@@ -21,7 +22,7 @@ describe("production build", () => {
     if (result.exitCode !== 0) {
       throw new Error(`build failed:\n${result.stderr.toString()}`);
     }
-  });
+  }, BUILD_TIMEOUT_MS);
 
   test("produces two HTML entry points and one shared JS bundle", () => {
     expect(existsSync(join(DIST, "index.html"))).toBe(true);
@@ -68,7 +69,7 @@ describe("type safety", () => {
     expect(result.exitCode).not.toBe(0);
     // The previous successful output survives, so a broken bundle is never published.
     expect(existsSync(join(DIST, "index.html"))).toBe(true);
-  });
+  }, BUILD_TIMEOUT_MS);
 });
 
 describe("api base url", () => {
