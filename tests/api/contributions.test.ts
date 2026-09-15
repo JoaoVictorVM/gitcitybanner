@@ -1,6 +1,5 @@
 import { afterEach, beforeEach, describe, expect, spyOn, test } from "bun:test";
 import handler from "../../api/contributions";
-import { ALLOWED_ORIGIN } from "../../api/_lib/cors";
 import { CACHE_CONTROL_ERROR, CACHE_CONTROL_SUCCESS, clearCache } from "../../api/_lib/cache";
 import { RATE_LIMIT_PER_IP, resetRateLimit } from "../../api/_lib/rateLimit";
 import { buildCalendarHtml } from "./fixture";
@@ -134,16 +133,7 @@ describe("GET /api/contributions", () => {
     expect((await readError(response)).code).toBe("PARSE_FAILED");
   });
 
-  test("answers the OPTIONS preflight with 204 and the CORS headers", async () => {
-    const response = await handler(request("", "OPTIONS"));
-
-    expect(response.status).toBe(204);
-    expect(await response.text()).toBe("");
-    expect(response.headers.get("Access-Control-Allow-Origin")).toBe(ALLOWED_ORIGIN);
-    expect(response.headers.get("Access-Control-Allow-Methods")).toBe("GET");
-  });
-
-  test("every response carries the CORS headers and a JSON body, never HTML", async () => {
+  test("every response carries a JSON body, never HTML", async () => {
     const cases: UpstreamStub[][] = [
       [{ status: 200, body: buildCalendarHtml() }],
       [{ status: 404 }],
@@ -153,14 +143,12 @@ describe("GET /api/contributions", () => {
     for (const [index, responses] of cases.entries()) {
       stubUpstream(...responses);
       const response = await handler(request(`?username=carrier${index}`));
-      expect(response.headers.get("Access-Control-Allow-Origin")).toBe(ALLOWED_ORIGIN);
       expect(response.headers.get("Content-Type")).toBe("application/json");
       await expect(response.json()).resolves.toBeDefined();
     }
 
     stubUpstream({ status: 200, body: buildCalendarHtml() });
     const invalid = await handler(request("?username=-bad-"));
-    expect(invalid.headers.get("Access-Control-Allow-Origin")).toBe(ALLOWED_ORIGIN);
     expect(invalid.headers.get("Content-Type")).toBe("application/json");
   });
 

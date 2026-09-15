@@ -1,6 +1,5 @@
 import { CACHE_CONTROL_ERROR, CACHE_CONTROL_SUCCESS, getCached, setCached } from "./_lib/cache";
 import { extractClientIp } from "./_lib/clientIp";
-import { buildPreflightResponse, withCorsHeaders } from "./_lib/cors";
 import { errorResponse, logParseFailure } from "./_lib/errors";
 import { fetchContributionsSvg } from "./_lib/github";
 import { ParseError, parseContributionsSvg } from "./_lib/parse";
@@ -9,12 +8,10 @@ import type { ContributionData, ErrorCode } from "./_lib/types";
 import { isValidUsername } from "./_lib/validate";
 
 function jsonResponse(status: number, body: unknown, headers: Record<string, string>): Response {
-  return withCorsHeaders(
-    new Response(JSON.stringify(body), {
-      status,
-      headers: { "Content-Type": "application/json", ...headers },
-    }),
-  );
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: { "Content-Type": "application/json", ...headers },
+  });
 }
 
 function succeed(data: ContributionData): Response {
@@ -27,8 +24,6 @@ function fail(code: ErrorCode, headers: Record<string, string> = {}): Response {
 }
 
 export default async function handler(request: Request): Promise<Response> {
-  if (request.method === "OPTIONS") return buildPreflightResponse();
-
   try {
     const username = new URL(request.url).searchParams.get("username") ?? "";
     if (!isValidUsername(username)) return fail("INVALID_USERNAME");
