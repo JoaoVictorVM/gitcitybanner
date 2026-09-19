@@ -24,15 +24,17 @@ describe("production build", () => {
     }
   }, BUILD_TIMEOUT_MS);
 
-  test("produces two HTML entry points and one shared JS bundle", () => {
+  test("produces the four HTML entry points and one shared JS bundle", () => {
     expect(existsSync(join(DIST, "index.html"))).toBe(true);
     expect(existsSync(join(DIST, "en", "index.html"))).toBe(true);
+    expect(existsSync(join(DIST, "gerar", "index.html"))).toBe(true);
+    expect(existsSync(join(DIST, "en", "generate", "index.html"))).toBe(true);
     expect(existsSync(join(DIST, "app.js"))).toBe(true);
     expect(existsSync(join(DIST, "styles", "main.css"))).toBe(true);
   });
 
   test("rewrites every relative asset reference to the site root", async () => {
-    for (const entry of ["index.html", "en/index.html"]) {
+    for (const entry of ["index.html", "en/index.html", "gerar/index.html", "en/generate/index.html"]) {
       const html = await Bun.file(join(DIST, entry)).text();
       const offenders = [...html.matchAll(/\s(?:href|src)="(\.{1,2}\/[^"]*)"/g)].map(
         (match) => match[1]!,
@@ -46,11 +48,25 @@ describe("production build", () => {
   test("keeps the declared lang on each entry point", async () => {
     expect(await Bun.file(join(DIST, "index.html")).text()).toContain('<html lang="pt-BR">');
     expect(await Bun.file(join(DIST, "en", "index.html")).text()).toContain('<html lang="en">');
+    expect(await Bun.file(join(DIST, "gerar", "index.html")).text()).toContain('<html lang="pt-BR">');
+    expect(await Bun.file(join(DIST, "en", "generate", "index.html")).text()).toContain('<html lang="en">');
   });
 
   test("rewrites the language selector links to the site root", async () => {
     expect(await Bun.file(join(DIST, "index.html")).text()).toContain('href="/en/"');
     expect(await Bun.file(join(DIST, "en", "index.html")).text()).toContain('href="/"');
+    expect(await Bun.file(join(DIST, "gerar", "index.html")).text()).toContain('href="/en/generate/"');
+    expect(await Bun.file(join(DIST, "en", "generate", "index.html")).text()).toContain('href="/gerar/"');
+  });
+
+  test("the landing links to the generator in its own language", async () => {
+    expect(await Bun.file(join(DIST, "index.html")).text()).toContain('href="/gerar/"');
+    expect(await Bun.file(join(DIST, "en", "index.html")).text()).toContain('href="/en/generate/"');
+  });
+
+  test("the generator links back to the landing", async () => {
+    expect(await Bun.file(join(DIST, "gerar", "index.html")).text()).toContain('class="site-title" href="/"');
+    expect(await Bun.file(join(DIST, "en", "generate", "index.html")).text()).toContain('class="site-title" href="/en/"');
   });
 });
 
