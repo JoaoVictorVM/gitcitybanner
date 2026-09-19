@@ -8,6 +8,7 @@
     "allowJs": false,
     "noEmit": true,
     "skipLibCheck": true,
+    "resolveJsonModule": true,
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "noFallthroughCasesInSwitch": true,
