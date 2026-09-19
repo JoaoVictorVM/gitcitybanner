@@ -78,6 +78,16 @@ describe("production build", () => {
     }
   });
 
+  test("every page keeps the same fixed tab title", async () => {
+    for (const entry of ["index.html", "en/index.html", "gerar/index.html", "en/generate/index.html"]) {
+      const html = await Bun.file(join(DIST, entry)).text();
+      expect(html, entry).toContain("<title>gitcitybanner</title>");
+      expect(html, entry).not.toContain("data-i18n-title");
+    }
+    const bundle = await Bun.file(join(DIST, "app.js")).text();
+    expect(bundle).not.toContain("document.title");
+  });
+
   test("the generator links back to the landing", async () => {
     expect(await Bun.file(join(DIST, "gerar", "index.html")).text()).toContain('class="site-title" href="/"');
     expect(await Bun.file(join(DIST, "en", "generate", "index.html")).text()).toContain('class="site-title" href="/en/"');
