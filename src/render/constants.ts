@@ -21,13 +21,13 @@ export const RENDER_CONSTANTS: Record<string, RenderConstants> = {
     captionFontSize: 28,
     footerFontSize: 20,
     captionOffset: { left: 40, top: 44 },
-    footerOffset: { right: 40, bottom: 36 },
+    footerOffset: { right: 16, bottom: 16 },
   },
   "1584x396": {
     captionFontSize: 25,
     footerFontSize: 18,
     captionOffset: { left: 36, top: 40 },
-    footerOffset: { right: 36, bottom: 32 },
+    footerOffset: { right: 14, bottom: 14 },
   },
 };
 

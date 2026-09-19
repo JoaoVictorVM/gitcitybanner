@@ -80,7 +80,7 @@ describe("renderBanner", () => {
 
     const rects = fillRects(calls);
     expect(rects[0]?.args).toEqual([0, 0, 1500, 500]);
-    expect(rects[1]?.args[1]).toBe(360);
+    expect(rects[1]?.args[1]).toBe(448);
 
     const palette = resolvePalette();
     expect(chimneyRects(rects).every((call) => call.fillStyle === palette.roof)).toBe(true);
@@ -186,9 +186,23 @@ describe("renderBanner", () => {
     expect(caption?.textAlign).toBe("left");
     expect(caption?.font).toContain(`${constants.captionFontSize}px`);
 
-    expect(footer?.args).toEqual([formatFooterText(), 1460, 464]);
+    expect(footer?.args).toEqual([formatFooterText(), 1484, 484]);
     expect(footer?.textAlign).toBe("right");
     expect(footer?.font).toContain(`${constants.footerFontSize}px`);
+  });
+
+  test("the footer sits inside the ground band with equal breathing room", () => {
+    for (const dimensions of [X_CANVAS, LINKEDIN_CANVAS]) {
+      const { canvas, calls } = createRecordingCanvas();
+      renderBanner(canvas, busyModel(), dimensions, "pt-BR");
+
+      const constants = resolveRenderConstants(dimensions);
+      const groundTop = fillRects(calls)[1]!.args[1] as number;
+      const textTop = dimensions.height - constants.footerOffset.bottom - constants.footerFontSize;
+
+      expect(textTop - groundTop).toBe(constants.footerOffset.bottom);
+      expect(constants.footerOffset.right).toBe(constants.footerOffset.bottom);
+    }
   });
 
   test("uses the english caption on the english locale", () => {
