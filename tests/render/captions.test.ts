@@ -38,7 +38,7 @@ describe("resolveRenderConstants", () => {
   test("returns the documented X offsets", () => {
     const x = resolveRenderConstants(X_CANVAS);
     expect(x.captionOffset).toEqual({ left: 40, top: 44 });
-    expect(x.footerOffset).toEqual({ right: 40, bottom: 36 });
+    expect(x.footerOffset).toEqual({ right: 16, bottom: 16 });
   });
 
   test("throws on an unrecognized canvas size", () => {

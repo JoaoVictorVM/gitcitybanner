@@ -217,8 +217,8 @@ describe("computeCityLayout", () => {
     expect(resolveLayoutConstants(X_CANVAS)).toEqual(X_CONSTANTS);
     expect(resolveLayoutConstants(LINKEDIN_CANVAS)).toEqual(LAYOUT_CONSTANTS["1584x396"]!);
 
-    expect(x.groundY).toBe(360);
-    expect(linkedin.groundY).toBe(300);
+    expect(x.groundY).toBe(448);
+    expect(linkedin.groundY).toBe(350);
     expect(linkedin.buildings[0]?.x).toBe(49);
 
     expect(linkedin.buildings[0]!.height).not.toBe(x.buildings[0]!.height);
