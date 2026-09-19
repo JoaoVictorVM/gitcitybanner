@@ -289,8 +289,8 @@ body {
 }
 
 .downloads__button:not(:disabled):hover {
+  background-color: var(--surface-hover);
   border-color: var(--accent);
-  color: var(--accent);
 }
 
 .downloads__button--pending {
