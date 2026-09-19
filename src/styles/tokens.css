@@ -1,13 +1,25 @@
 :root {
+  /*
+    Combinação "gitcalendar" (guardada para comparação, não aplicada):
+    --sky: #010409;
+    --ground: #000000;
+    --building: #0d1117;
+    --roof: #0d1117;
+    --window-0: #161b22;
+    --window-1: #033a16;
+    --window-2: #196c2e;
+    --window-3: #2ea043;
+    --window-4: #56d364;
+  */
   --sky: #0b1220;
   --ground: #060a12;
   --building: #131c2a;
   --roof: #1b2536;
   --window-0: #1b2733;
-  --window-1: #4a3b1e;
-  --window-2: #8a6a22;
-  --window-3: #d1a02e;
-  --window-4: #ffd76a;
+  --window-1: #033a16;
+  --window-2: #196c2e;
+  --window-3: #2ea043;
+  --window-4: #56d364;
 
   --page-top: #0b1220;
   --page-bottom: #060a12;
