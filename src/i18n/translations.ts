@@ -4,7 +4,6 @@ export type Locale = (typeof LOCALES)[number];
 export const DEFAULT_LOCALE: Locale = "pt-BR";
 
 const ptBR = {
-  documentTitle: "gitcitybanner — banner de contribuições do GitHub",
   title: "gitcitybanner",
   tagline:
     "Transforme os últimos 365 dias de contribuições de um perfil do GitHub em um banner de cidade noturna, pronto para baixar em PNG.",
@@ -28,7 +27,6 @@ const ptBR = {
   langSwitchLabel: "Idioma",
   langPt: "PT",
   langEn: "EN",
-  landingDocumentTitle: "gitcitybanner — sua atividade no GitHub como uma cidade à noite",
   heroEyebrow: "365 dias · 12 casas · 1 banner",
   heroHeadline: "Sua atividade no GitHub, vista como uma cidade à noite.",
   heroLead:
@@ -54,7 +52,6 @@ const ptBR = {
 export type TranslationKey = keyof typeof ptBR;
 
 const en: Record<TranslationKey, string> = {
-  documentTitle: "gitcitybanner — GitHub contribution banner",
   title: "gitcitybanner",
   tagline:
     "Turn the last 365 days of a GitHub profile's contributions into a night-city banner, ready to download as a PNG.",
@@ -78,7 +75,6 @@ const en: Record<TranslationKey, string> = {
   langSwitchLabel: "Language",
   langPt: "PT",
   langEn: "EN",
-  landingDocumentTitle: "gitcitybanner — your GitHub activity as a city at night",
   heroEyebrow: "365 days · 12 houses · 1 banner",
   heroHeadline: "Your GitHub activity, seen as a city at night.",
   heroLead:
