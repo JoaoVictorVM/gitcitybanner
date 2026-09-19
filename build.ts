@@ -5,7 +5,7 @@ const BASE_PATH = "/";
 const SRC_DIR = "src";
 const OUT_DIR = "dist";
 
-const HTML_ENTRIES = ["index.html", "en/index.html"];
+const HTML_ENTRIES = ["index.html", "en/index.html", "gerar/index.html", "en/generate/index.html"];
 const SCRIPT_ENTRY = `${SRC_DIR}/app.ts`;
 const STYLE_ENTRY = `${SRC_DIR}/styles/main.css`;
 

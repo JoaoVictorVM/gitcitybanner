@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>gitcitybanner — sua atividade no GitHub como uma cidade à noite</title>
+    <meta name="description" content="Transforme os últimos 365 dias de contribuições de um perfil do GitHub em um banner de cidade noturna." />
+    <link rel="stylesheet" href="./styles/main.css" />
+  </head>
+  <body data-i18n-title="landingDocumentTitle">
+    <header class="site-header shell">
+      <a class="site-title" href="./" data-i18n="title">gitcitybanner</a>
+      <nav class="lang-switch" aria-label="Idioma" data-i18n-aria-label="langSwitchLabel">
+        <span data-i18n="langPt" aria-current="true">PT</span>
+        <span class="lang-switch__separator" aria-hidden="true">·</span>
+        <a href="./en/" hreflang="en" data-i18n="langEn">EN</a>
+      </nav>
+    </header>
+
+    <main class="site-main landing shell">
+      <section class="hero">
+        <p class="hero__eyebrow" data-i18n="heroEyebrow">365 dias · 12 casas · 1 banner</p>
+        <h1 class="hero__headline" data-i18n="heroHeadline">Sua atividade no GitHub, vista como uma cidade à noite.</h1>
+        <p class="hero__lead" data-i18n="heroLead">Cada casa é um mês. Cada janela, um dia. Quanto mais contribuições, mais forte a luz. Digite um username e baixe o banner pronto para o X ou o LinkedIn.</p>
+        <a class="cta" href="./gerar/" data-i18n="heroCta">Gerar meu banner</a>
+        <figure class="hero__figure">
+          <canvas
+            class="hero__canvas"
+            data-landing-hero
+            width="1500"
+            height="500"
+            role="img"
+            aria-label="Exemplo gerado com as contribuições de @torvalds"
+            data-i18n-aria-label="heroCaption"
+          ></canvas>
+          <figcaption class="hero__caption" data-i18n="heroCaption">Exemplo gerado com as contribuições de @torvalds</figcaption>
+        </figure>
+      </section>
+
+      <section class="steps" aria-labelledby="how-title">
+        <h2 id="how-title" class="section-title" data-i18n="howTitle">Como funciona</h2>
+        <ol class="steps__list">
+          <li class="step">
+            <h3 class="step__title" data-i18n="step1Title">Digite o username</h3>
+            <p class="step__body" data-i18n="step1Body">Qualquer perfil público do GitHub. Nada é armazenado.</p>
+          </li>
+          <li class="step">
+            <h3 class="step__title" data-i18n="step2Title">Veja a cidade acender</h3>
+            <p class="step__body" data-i18n="step2Body">Os últimos 365 dias viram doze casas, uma por mês.</p>
+          </li>
+          <li class="step">
+            <h3 class="step__title" data-i18n="step3Title">Baixe em PNG</h3>
+            <p class="step__body" data-i18n="step3Body">1500×500 para o X, 1584×396 para o LinkedIn.</p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="legend" aria-labelledby="legend-title">
+        <h2 id="legend-title" class="section-title" data-i18n="legendTitle">Como ler a cidade</h2>
+        <div class="legend__grid">
+          <svg class="legend__house" viewBox="0 0 114 208" role="img" aria-labelledby="legend-figure-title">
+            <title id="legend-figure-title" data-i18n="legendFigure">Uma casa do banner com o grid de janelas</title>
+            <rect class="lh__roof" x="78" y="4" width="9" height="32"/>
+            <polygon class="lh__roof" points="0,36 57,0 114,36"/>
+            <rect class="lh__wall" x="9" y="36" width="96" height="172"/>
+            <rect class="lh__w1" x="18.5" y="49.5" width="13" height="13"/>
+            <rect class="lh__w2" x="18.5" y="65.5" width="13" height="13"/>
+            <rect class="lh__w3" x="18.5" y="81.5" width="13" height="13"/>
+            <rect class="lh__w4" x="18.5" y="97.5" width="13" height="13"/>
+            <rect class="lh__w2" x="18.5" y="113.5" width="13" height="13"/>
+            <rect class="lh__w1" x="18.5" y="129.5" width="13" height="13"/>
+            <rect class="lh__w1" x="18.5" y="145.5" width="13" height="13"/>
+            <rect class="lh__w0" x="34.5" y="49.5" width="13" height="13"/>
+            <rect class="lh__w1" x="34.5" y="65.5" width="13" height="13"/>
+            <rect class="lh__w2" x="34.5" y="81.5" width="13" height="13"/>
+            <rect class="lh__w3" x="34.5" y="97.5" width="13" height="13"/>
+            <rect class="lh__w2" x="34.5" y="113.5" width="13" height="13"/>
+            <rect class="lh__w1" x="34.5" y="129.5" width="13" height="13"/>
+            <rect class="lh__w0" x="34.5" y="145.5" width="13" height="13"/>
+            <rect class="lh__w2" x="50.5" y="49.5" width="13" height="13"/>
+            <rect class="lh__w3" x="50.5" y="65.5" width="13" height="13"/>
+            <rect class="lh__w4" x="50.5" y="81.5" width="13" height="13"/>
+            <rect class="lh__w3" x="50.5" y="97.5" width="13" height="13"/>
+            <rect class="lh__w2" x="50.5" y="113.5" width="13" height="13"/>
+            <rect class="lh__w1" x="50.5" y="129.5" width="13" height="13"/>
+            <rect class="lh__w1" x="50.5" y="145.5" width="13" height="13"/>
+            <rect class="lh__w0" x="66.5" y="49.5" width="13" height="13"/>
+            <rect class="lh__w0" x="66.5" y="65.5" width="13" height="13"/>
+            <rect class="lh__w1" x="66.5" y="81.5" width="13" height="13"/>
+            <rect class="lh__w2" x="66.5" y="97.5" width="13" height="13"/>
+            <rect class="lh__w3" x="66.5" y="113.5" width="13" height="13"/>
+            <rect class="lh__w4" x="66.5" y="129.5" width="13" height="13"/>
+            <rect class="lh__w3" x="66.5" y="145.5" width="13" height="13"/>
+            <rect class="lh__w1" x="82.5" y="49.5" width="13" height="13"/>
+            <rect class="lh__w1" x="82.5" y="65.5" width="13" height="13"/>
+            <rect class="lh__w0" x="82.5" y="81.5" width="13" height="13"/>
+            <rect class="lh__w2" x="82.5" y="97.5" width="13" height="13"/>
+            <rect class="lh__w3" x="82.5" y="113.5" width="13" height="13"/>
+            <rect class="lh__w2" x="82.5" y="129.5" width="13" height="13"/>
+            <rect class="lh__w1" x="82.5" y="145.5" width="13" height="13"/>
+          </svg>
+          <ul class="legend__list">
+            <li class="legend__item">
+              <span class="legend__swatch legend__swatch--house" aria-hidden="true"></span>
+              <span data-i18n="legendHouse">Cada casa é um mês — doze casas, os últimos doze meses, da esquerda para a direita.</span>
+            </li>
+            <li class="legend__item">
+              <span class="legend__swatch legend__swatch--window" aria-hidden="true"></span>
+              <span data-i18n="legendWindow">Cada janela é um dia, em ordem: de cima para baixo, coluna a coluna.</span>
+            </li>
+            <li class="legend__item">
+              <span class="legend__swatch legend__swatch--light" aria-hidden="true"></span>
+              <span data-i18n="legendLight">O brilho é a quantidade de contribuições do dia, na mesma escala de verdes do gráfico do GitHub.</span>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="closing">
+        <h2 class="section-title" data-i18n="closingTitle">Pronto para ver a sua cidade?</h2>
+        <a class="cta" href="./gerar/" data-i18n="heroCta">Gerar meu banner</a>
+      </section>
+    </main>
+
+    <footer class="site-footer shell">
+      <p data-i18n="footer">Projeto open source. Nenhum dado é armazenado.</p>
+    </footer>
+
+    <script type="module" src="./app.ts"></script>
+  </body>
+</html>

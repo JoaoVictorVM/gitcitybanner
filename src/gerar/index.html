@@ -8,19 +8,20 @@
       name="description"
       content="Transforme os últimos 365 dias de contribuições de um perfil do GitHub em um banner de cidade noturna."
     />
-    <link rel="stylesheet" href="./styles/main.css" />
+    <link rel="stylesheet" href="../styles/main.css" />
   </head>
   <body>
     <header class="site-header shell">
-      <h1 class="site-title" data-i18n="title">gitcitybanner</h1>
+      <a class="site-title" href="../" data-i18n="title">gitcitybanner</a>
       <nav class="lang-switch" aria-label="Idioma" data-i18n-aria-label="langSwitchLabel">
         <span data-i18n="langPt" aria-current="true">PT</span>
         <span class="lang-switch__separator" aria-hidden="true">·</span>
-        <a href="./en/" hreflang="en" data-i18n="langEn">EN</a>
+        <a href="../en/generate/" hreflang="en" data-i18n="langEn">EN</a>
       </nav>
     </header>
 
     <main class="site-main shell">
+      <h1 class="page-title" data-i18n="generateButtonLabel">Gerar banner</h1>
       <p class="tagline" data-i18n="tagline">
         Transforme os últimos 365 dias de contribuições de um perfil do GitHub em um banner de cidade
         noturna, pronto para baixar em PNG.
@@ -41,6 +42,6 @@
       <p data-i18n="footer">Projeto open source. Nenhum dado é armazenado.</p>
     </footer>
 
-    <script type="module" src="./app.ts"></script>
+    <script type="module" src="../app.ts"></script>
   </body>
 </html>
