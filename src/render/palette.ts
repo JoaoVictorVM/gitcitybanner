@@ -11,7 +11,7 @@ const FALLBACK_PALETTE: Palette = {
   ground: "#060a12",
   building: "#131c2a",
   roof: "#1b2536",
-  windows: ["#1b2733", "#4a3b1e", "#8a6a22", "#d1a02e", "#ffd76a"],
+  windows: ["#1b2733", "#033a16", "#196c2e", "#2ea043", "#56d364"],
 };
 
 function readProperty(styles: CSSStyleDeclaration, name: string, fallback: string): string {
