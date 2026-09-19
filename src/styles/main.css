@@ -17,7 +17,7 @@ html {
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(180deg, var(--sky) 0%, var(--ground) 100%);
+  background: linear-gradient(180deg, var(--page-top) 0%, var(--page-bottom) 100%);
   color: var(--text);
   font-family: var(--font-sans);
   font-size: var(--font-size-base);
@@ -128,7 +128,7 @@ body {
   padding: var(--space-sm) var(--space-md);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background-color: color-mix(in srgb, var(--building) 60%, transparent);
+  background-color: color-mix(in srgb, var(--surface) 60%, transparent);
   color: var(--text);
   font-family: inherit;
   font-size: var(--font-size-base);
@@ -152,7 +152,7 @@ body {
   border: 1px solid transparent;
   border-radius: var(--radius);
   background-color: var(--accent);
-  color: var(--ground);
+  color: var(--page-bottom);
   font-family: inherit;
   font-size: var(--font-size-base);
   font-weight: 600;
@@ -160,13 +160,13 @@ body {
 }
 
 .username-form__button:disabled {
-  background-color: var(--building);
+  background-color: var(--surface);
   color: var(--text-muted);
   cursor: not-allowed;
 }
 
 .username-form__button:not(:disabled):hover {
-  background-color: var(--window-3);
+  background-color: var(--accent-hover);
 }
 
 .username-form__button--pending {
@@ -209,13 +209,13 @@ body {
   border-radius: var(--radius);
   outline: 1px dashed var(--border);
   outline-offset: -1px;
-  background-color: color-mix(in srgb, var(--building) 60%, transparent);
+  background-color: color-mix(in srgb, var(--surface) 60%, transparent);
 }
 
 .preview--pending {
   padding: 0;
   outline-style: solid;
-  background-color: color-mix(in srgb, var(--building) 85%, transparent);
+  background-color: color-mix(in srgb, var(--surface) 85%, transparent);
   animation: pulse 1.2s ease-in-out infinite alternate;
 }
 
@@ -230,7 +230,7 @@ body {
 
 @keyframes pulse {
   to {
-    background-color: color-mix(in srgb, var(--building) 45%, transparent);
+    background-color: color-mix(in srgb, var(--surface) 45%, transparent);
   }
 }
 
@@ -260,7 +260,7 @@ body {
   padding: var(--space-sm) var(--space-lg);
   border: 1px solid var(--border);
   border-radius: var(--radius);
-  background-color: var(--building);
+  background-color: var(--surface);
   color: var(--text);
   font-family: inherit;
   font-size: var(--font-size-sm);
