@@ -64,6 +64,20 @@ describe("production build", () => {
     expect(await Bun.file(join(DIST, "en", "index.html")).text()).toContain('href="/en/generate/"');
   });
 
+  test("copies the favicon files into the output root", async () => {
+    expect(existsSync(join(DIST, "favicon.svg"))).toBe(true);
+    expect(existsSync(join(DIST, "apple-touch-icon.png"))).toBe(true);
+    expect(await Bun.file(join(DIST, "favicon.svg")).text()).toContain("<svg");
+  });
+
+  test("every page declares the favicon from the site root", async () => {
+    for (const entry of ["index.html", "en/index.html", "gerar/index.html", "en/generate/index.html"]) {
+      const html = await Bun.file(join(DIST, entry)).text();
+      expect(html, entry).toContain('rel="icon" href="/favicon.svg" type="image/svg+xml"');
+      expect(html, entry).toContain('rel="apple-touch-icon" href="/apple-touch-icon.png"');
+    }
+  });
+
   test("the generator links back to the landing", async () => {
     expect(await Bun.file(join(DIST, "gerar", "index.html")).text()).toContain('class="site-title" href="/"');
     expect(await Bun.file(join(DIST, "en", "generate", "index.html")).text()).toContain('class="site-title" href="/en/"');
