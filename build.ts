@@ -1,4 +1,4 @@
-import { rm, mkdir } from "node:fs/promises";
+import { copyFile, rm, mkdir } from "node:fs/promises";
 import { posix, dirname } from "node:path";
 
 const BASE_PATH = "/";
@@ -8,6 +8,7 @@ const OUT_DIR = "dist";
 const HTML_ENTRIES = ["index.html", "en/index.html", "gerar/index.html", "en/generate/index.html"];
 const SCRIPT_ENTRY = `${SRC_DIR}/app.ts`;
 const STYLE_ENTRY = `${SRC_DIR}/styles/main.css`;
+const STATIC_FILES = ["favicon.svg", "apple-touch-icon.png"];
 
 function typecheck(): void {
   const result = Bun.spawnSync(["bun", "x", "tsc", "--noEmit"], {
@@ -58,6 +59,12 @@ async function buildStyles(): Promise<void> {
   }
 }
 
+async function copyStatic(): Promise<void> {
+  for (const file of STATIC_FILES) {
+    await copyFile(`${SRC_DIR}/${file}`, `${OUT_DIR}/${file}`);
+  }
+}
+
 async function buildHtml(): Promise<void> {
   for (const entry of HTML_ENTRIES) {
     const source = await Bun.file(`${SRC_DIR}/${entry}`).text();
@@ -72,5 +79,6 @@ await rm(OUT_DIR, { recursive: true, force: true });
 await buildScript();
 await buildStyles();
 await buildHtml();
+await copyStatic();
 
 console.log(`[build] wrote ${OUT_DIR}/ with base path ${BASE_PATH}`);
