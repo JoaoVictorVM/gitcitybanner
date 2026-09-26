@@ -78,6 +78,27 @@ describe("production build", () => {
     }
   });
 
+  test("ships the Geist font files and their stylesheet unbundled", async () => {
+    for (const font of [
+      "geist-latin-wght-normal.woff2",
+      "geist-latin-ext-wght-normal.woff2",
+      "geist-mono-latin-wght-normal.woff2",
+      "geist-mono-latin-ext-wght-normal.woff2",
+    ]) {
+      expect(existsSync(join(DIST, "fonts", font)), font).toBe(true);
+    }
+    const fonts = await Bun.file(join(DIST, "styles", "fonts.css")).text();
+    expect(fonts).toContain('url("../fonts/geist-latin-wght-normal.woff2")');
+    expect(await Bun.file(join(DIST, "styles", "main.css")).text()).not.toContain("data:font");
+  });
+
+  test("the generator pages load the font stylesheet from the site root", async () => {
+    for (const entry of ["gerar/index.html", "en/generate/index.html"]) {
+      const html = await Bun.file(join(DIST, entry)).text();
+      expect(html, entry).toContain('href="/styles/fonts.css"');
+    }
+  });
+
   test("every page keeps the same fixed tab title", async () => {
     for (const entry of ["index.html", "en/index.html", "gerar/index.html", "en/generate/index.html"]) {
       const html = await Bun.file(join(DIST, entry)).text();
