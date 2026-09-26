@@ -3,8 +3,11 @@ import type { Locale } from "../i18n/translations";
 import { GRID_SLOTS, computeCityLayout } from "../layout/compute-layout";
 import { groupDaysByMonth } from "../layout/months";
 import type { CanvasDimensions } from "../layout/types";
+import { dimModel } from "../render/reveal";
 import { renderBanner } from "../render/renderer";
 import sample from "./sample.json";
+
+export { dimModel };
 
 export const CITY_DIMENSIONS: CanvasDimensions = { width: 1500, height: 500 };
 
@@ -37,23 +40,6 @@ function allDays(model: ContributionModel): Day[] {
 
 function litDaysAt(total: number, fraction: number): number {
   return Math.floor(clamp(fraction) * total);
-}
-
-export function dimModel(model: ContributionModel, fraction: number): ContributionModel {
-  const totalDays = model.weeks.reduce((sum, week) => sum + week.days.length, 0);
-  const litDays = litDaysAt(totalDays, fraction);
-  let index = 0;
-
-  return {
-    ...model,
-    weeks: model.weeks.map((week) => ({
-      days: week.days.map((day) => {
-        const lit = index < litDays;
-        index += 1;
-        return lit ? day : { ...day, level: 0 };
-      }),
-    })),
-  };
 }
 
 export function progressState(model: ContributionModel, fraction: number): ProgressState {
