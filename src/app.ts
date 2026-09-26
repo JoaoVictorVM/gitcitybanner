@@ -1,7 +1,6 @@
 import { getLocale, t } from "./i18n/locale";
 import { mountContributionRetrieval } from "./contributions/bootstrap";
 import { mountDownloadButtons } from "./downloads/bootstrap";
-import { mountLandingHero } from "./landing/hero";
 import { isLocale } from "./i18n/translations";
 import type { TranslationKey } from "./i18n/translations";
 
@@ -38,8 +37,9 @@ export function bootstrap(): Shell | null {
     console.warn(`[gitcitybanner] unknown lang "${document.documentElement.lang}", falling back to default locale`);
   }
   applyTranslations();
-  const hero = document.querySelector<HTMLCanvasElement>("canvas[data-landing-hero]");
-  if (hero) mountLandingHero(hero);
+  if (document.querySelector("[data-landing]")) {
+    void import("./landing/scroll").then(({ mountLanding }) => mountLanding(document));
+  }
   const shell = getShell();
   if (shell) {
     const downloads = mountDownloadButtons(shell);

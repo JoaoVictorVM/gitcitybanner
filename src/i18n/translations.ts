@@ -47,6 +47,14 @@ const ptBR = {
   legendFigure: "Uma casa do banner com o grid de janelas",
   closingTitle: "Pronto para ver a sua cidade?",
   backHome: "Início",
+  scrollHint: "Role para acender a cidade",
+  yearLabel: "Um ano, dia a dia",
+  contributionsNone: "nenhuma contribuição",
+  contributionsOne: "{count} contribuição",
+  contributionsMany: "{count} contribuições",
+  anatomyHouse: "Uma casa, um mês",
+  anatomyWindow: "Uma janela, um dia",
+  anatomyLight: "Mais luz, mais contribuições",
 } satisfies Record<string, string>;
 
 export type TranslationKey = keyof typeof ptBR;
@@ -95,6 +103,14 @@ const en: Record<TranslationKey, string> = {
   legendFigure: "One house from the banner with its window grid",
   closingTitle: "Ready to see your city?",
   backHome: "Home",
+  scrollHint: "Scroll to light up the city",
+  yearLabel: "One year, day by day",
+  contributionsNone: "no contributions",
+  contributionsOne: "{count} contribution",
+  contributionsMany: "{count} contributions",
+  anatomyHouse: "One house, one month",
+  anatomyWindow: "One window, one day",
+  anatomyLight: "More light, more contributions",
 };
 
 export const translations: Record<Locale, Record<TranslationKey, string>> = {
