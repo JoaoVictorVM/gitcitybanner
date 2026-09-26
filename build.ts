@@ -1,4 +1,4 @@
-import { copyFile, rm, mkdir } from "node:fs/promises";
+import { copyFile, cp, rm, mkdir } from "node:fs/promises";
 import { posix, dirname } from "node:path";
 
 const BASE_PATH = "/";
@@ -63,6 +63,8 @@ async function copyStatic(): Promise<void> {
   for (const file of STATIC_FILES) {
     await copyFile(`${SRC_DIR}/${file}`, `${OUT_DIR}/${file}`);
   }
+  await copyFile(`${SRC_DIR}/styles/fonts.css`, `${OUT_DIR}/styles/fonts.css`);
+  await cp(`${SRC_DIR}/fonts`, `${OUT_DIR}/fonts`, { recursive: true });
 }
 
 async function buildHtml(): Promise<void> {
