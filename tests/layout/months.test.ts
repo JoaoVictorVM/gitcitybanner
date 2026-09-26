@@ -94,6 +94,15 @@ describe("groupDaysByMonth", () => {
     for (const bucket of buckets) expect(bucket.levels.every((level) => level === 0)).toBe(true);
   });
 
+  test("exposes the day behind every level, in the same order", () => {
+    const february = groupDaysByMonth(buildModel(), SLOTS)[1]!;
+
+    expect(february.days).toHaveLength(february.levels.length);
+    expect(february.days[0]?.date).toBe("2025-02-01");
+    expect(february.days[28]?.date).toBe("2025-03-01");
+    expect(february.days.map((day) => day.level)).toEqual(february.levels);
+  });
+
   test("asking for fewer slots truncates the month", () => {
     const january = groupDaysByMonth(buildModel(), 7)[0]!;
 

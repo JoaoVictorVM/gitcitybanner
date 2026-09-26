@@ -1,10 +1,11 @@
-import type { ContributionModel } from "../contributions/types";
+import type { ContributionModel, Day } from "../contributions/types";
 
 export const MONTHS_PER_CITY = 12;
 
 export interface MonthBucket {
   key: string;
   levels: number[];
+  days: Day[];
 }
 
 function monthKeys(reference: string): string[] {
@@ -36,6 +37,6 @@ export function groupDaysByMonth(model: ContributionModel, slots: number): Month
   return keys.map((key) => {
     const start = firstDayOf.get(key);
     const window = start === undefined ? [] : days.slice(start, start + slots);
-    return { key, levels: window.map((day) => day.level) };
+    return { key, levels: window.map((day) => day.level), days: window };
   });
 }
