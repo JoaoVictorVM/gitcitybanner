@@ -92,11 +92,17 @@ describe("production build", () => {
     expect(await Bun.file(join(DIST, "styles", "main.css")).text()).not.toContain("data:font");
   });
 
-  test("the generator pages load the font stylesheet from the site root", async () => {
-    for (const entry of ["gerar/index.html", "en/generate/index.html"]) {
+  test("every page loads the font stylesheet from the site root", async () => {
+    for (const entry of ["index.html", "en/index.html", "gerar/index.html", "en/generate/index.html"]) {
       const html = await Bun.file(join(DIST, entry)).text();
       expect(html, entry).toContain('href="/styles/fonts.css"');
     }
+  });
+
+  test("keeps the landing animation libraries out of the shared bundle", async () => {
+    const app = await Bun.file(join(DIST, "app.js")).text();
+    expect(app).not.toContain("ScrollTrigger");
+    expect(app).toContain("chunks/");
   });
 
   test("every page keeps the same fixed tab title", async () => {

@@ -35,7 +35,8 @@ async function buildScript(): Promise<void> {
   const result = await Bun.build({
     entrypoints: [SCRIPT_ENTRY],
     outdir: OUT_DIR,
-    naming: "[name].js",
+    naming: { entry: "[name].js", chunk: "chunks/[name]-[hash].js" },
+    splitting: true,
     target: "browser",
     format: "esm",
     minify: true,

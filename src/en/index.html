@@ -7,9 +7,10 @@
     <meta name="description" content="Turn the last 365 days of a GitHub profile's contributions into a night-city banner." />
     <link rel="icon" href="../favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+    <link rel="stylesheet" href="../styles/fonts.css" />
     <link rel="stylesheet" href="../styles/main.css" />
   </head>
-  <body>
+  <body class="page-landing">
     <header class="site-header shell">
       <a class="site-title" href="./" data-i18n="title">gitcitybanner</a>
       <nav class="lang-switch" aria-label="Language" data-i18n-aria-label="langSwitchLabel">
@@ -19,29 +20,110 @@
       </nav>
     </header>
 
-    <main class="site-main landing shell">
-      <section class="hero">
-        <p class="hero__eyebrow" data-i18n="heroEyebrow">365 days · 12 houses · 1 banner</p>
-        <h1 class="hero__headline" data-i18n="heroHeadline">Your GitHub activity, seen as a city at night.</h1>
-        <p class="hero__lead" data-i18n="heroLead">Every house is a month. Every window, a day. The more contributions, the brighter the light. Type a username and download a banner ready for X or LinkedIn.</p>
-        <a class="cta" href="./generate/" data-i18n="heroCta">Generate my banner</a>
-        <figure class="hero__figure">
-          <canvas
-            class="hero__canvas"
-            data-landing-hero
-            width="1500"
-            height="500"
-            role="img"
-            aria-label="Example generated from @torvalds's contributions"
-            data-i18n-aria-label="heroCaption"
-          ></canvas>
-          <figcaption class="hero__caption" data-i18n="heroCaption">Example generated from @torvalds's contributions</figcaption>
-        </figure>
+    <main class="landing" data-landing>
+      <section class="intro shell">
+        <p class="eyebrow" data-intro-fade data-i18n="heroEyebrow">365 days · 12 houses · 1 banner</p>
+        <h1 class="display" data-split data-i18n="heroHeadline">Your GitHub activity, seen as a city at night.</h1>
+        <div class="intro__foot">
+          <p class="lead" data-intro-fade data-i18n="heroLead">Every house is a month. Every window, a day. The more contributions, the brighter the light. Type a username and download a banner ready for X or LinkedIn.</p>
+          <a class="cta" href="./generate/" data-magnetic data-intro-fade data-i18n="heroCta">Generate my banner</a>
+        </div>
+        <p class="scroll-hint" data-scroll-hint data-intro-fade aria-hidden="true">
+          <span data-i18n="scrollHint">Scroll to light up the city</span>
+          <span class="scroll-hint__line"></span>
+        </p>
       </section>
 
-      <section class="steps" aria-labelledby="how-title">
-        <h2 id="how-title" class="section-title" data-i18n="howTitle">How it works</h2>
-        <ol class="steps__list">
+      <section class="year" data-year aria-labelledby="year-label">
+        <div class="year__stage shell">
+          <div class="year__head" data-year-chrome>
+            <p id="year-label" class="eyebrow" data-i18n="yearLabel">One year, day by day</p>
+            <p class="year__counter" aria-live="off">
+              <span class="year__date" data-counter-date></span>
+              <span class="year__total" data-counter-total></span>
+            </p>
+          </div>
+          <div class="year__frame" data-city-frame>
+            <canvas
+              class="year__canvas"
+              data-city
+              width="1500"
+              height="500"
+              role="img"
+              aria-label="Example generated from @torvalds's contributions"
+              data-i18n-aria-label="heroCaption"
+            ></canvas>
+            <span class="year__focus" data-window-focus hidden></span>
+            <span class="year__tooltip" data-tooltip role="tooltip" hidden></span>
+          </div>
+          <p class="year__caption" data-year-chrome data-i18n="heroCaption">Example generated from @torvalds's contributions</p>
+        </div>
+      </section>
+
+      <section class="anatomy shell" data-anatomy aria-labelledby="anatomy-title">
+        <h2 id="anatomy-title" class="section-title" data-reveal-lines data-i18n="legendTitle">How to read the city</h2>
+        <div class="anatomy__grid">
+          <svg class="anatomy__house" data-house viewBox="0 0 114 208" role="img" aria-labelledby="anatomy-figure-title">
+              <title id="anatomy-figure-title" data-i18n="legendFigure">One house from the banner with its window grid</title>
+              <rect class="lh__roof" x="78" y="4" width="9" height="32"/>
+              <polygon class="lh__roof" points="0,36 57,0 114,36"/>
+              <rect class="lh__wall" x="9" y="36" width="96" height="172"/>
+              <rect class="lh__w1" data-window x="18.5" y="49.5" width="13" height="13"/>
+              <rect class="lh__w2" data-window x="18.5" y="65.5" width="13" height="13"/>
+              <rect class="lh__w3" data-window x="18.5" y="81.5" width="13" height="13"/>
+              <rect class="lh__w4" data-window x="18.5" y="97.5" width="13" height="13"/>
+              <rect class="lh__w2" data-window x="18.5" y="113.5" width="13" height="13"/>
+              <rect class="lh__w1" data-window x="18.5" y="129.5" width="13" height="13"/>
+              <rect class="lh__w1" data-window x="18.5" y="145.5" width="13" height="13"/>
+              <rect class="lh__w0" data-window x="34.5" y="49.5" width="13" height="13"/>
+              <rect class="lh__w1" data-window x="34.5" y="65.5" width="13" height="13"/>
+              <rect class="lh__w2" data-window x="34.5" y="81.5" width="13" height="13"/>
+              <rect class="lh__w3" data-window x="34.5" y="97.5" width="13" height="13"/>
+              <rect class="lh__w2" data-window x="34.5" y="113.5" width="13" height="13"/>
+              <rect class="lh__w1" data-window x="34.5" y="129.5" width="13" height="13"/>
+              <rect class="lh__w0" data-window x="34.5" y="145.5" width="13" height="13"/>
+              <rect class="lh__w2" data-window x="50.5" y="49.5" width="13" height="13"/>
+              <rect class="lh__w3" data-window x="50.5" y="65.5" width="13" height="13"/>
+              <rect class="lh__w4" data-window x="50.5" y="81.5" width="13" height="13"/>
+              <rect class="lh__w3" data-window x="50.5" y="97.5" width="13" height="13"/>
+              <rect class="lh__w2" data-window x="50.5" y="113.5" width="13" height="13"/>
+              <rect class="lh__w1" data-window x="50.5" y="129.5" width="13" height="13"/>
+              <rect class="lh__w1" data-window x="50.5" y="145.5" width="13" height="13"/>
+              <rect class="lh__w0" data-window x="66.5" y="49.5" width="13" height="13"/>
+              <rect class="lh__w0" data-window x="66.5" y="65.5" width="13" height="13"/>
+              <rect class="lh__w1" data-window x="66.5" y="81.5" width="13" height="13"/>
+              <rect class="lh__w2" data-window x="66.5" y="97.5" width="13" height="13"/>
+              <rect class="lh__w3" data-window x="66.5" y="113.5" width="13" height="13"/>
+              <rect class="lh__w4" data-window x="66.5" y="129.5" width="13" height="13"/>
+              <rect class="lh__w3" data-window x="66.5" y="145.5" width="13" height="13"/>
+              <rect class="lh__w1" data-window x="82.5" y="49.5" width="13" height="13"/>
+              <rect class="lh__w1" data-window x="82.5" y="65.5" width="13" height="13"/>
+              <rect class="lh__w0" data-window x="82.5" y="81.5" width="13" height="13"/>
+              <rect class="lh__w2" data-window x="82.5" y="97.5" width="13" height="13"/>
+              <rect class="lh__w3" data-window x="82.5" y="113.5" width="13" height="13"/>
+              <rect class="lh__w2" data-window x="82.5" y="129.5" width="13" height="13"/>
+              <rect class="lh__w1" data-window x="82.5" y="145.5" width="13" height="13"/>
+            </svg>
+          <ol class="anatomy__notes">
+            <li class="note" data-note>
+              <h3 class="note__title" data-i18n="anatomyHouse">One house, one month</h3>
+              <p class="note__body" data-i18n="legendHouse">Every house is a month — twelve houses, the last twelve months, left to right.</p>
+            </li>
+            <li class="note" data-note>
+              <h3 class="note__title" data-i18n="anatomyWindow">One window, one day</h3>
+              <p class="note__body" data-i18n="legendWindow">Every window is a day, in order: top to bottom, column by column.</p>
+            </li>
+            <li class="note" data-note>
+              <h3 class="note__title" data-i18n="anatomyLight">More light, more contributions</h3>
+              <p class="note__body" data-i18n="legendLight">Brightness is the day's contribution count, on the same green scale as the GitHub graph.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="steps shell" aria-labelledby="how-title">
+        <h2 id="how-title" class="section-title" data-reveal-lines data-i18n="howTitle">How it works</h2>
+        <ol class="steps__list" data-reveal-group>
           <li class="step">
             <h3 class="step__title" data-i18n="step1Title">Type the username</h3>
             <p class="step__body" data-i18n="step1Body">Any public GitHub profile. Nothing is stored.</p>
@@ -57,70 +139,9 @@
         </ol>
       </section>
 
-      <section class="legend" aria-labelledby="legend-title">
-        <h2 id="legend-title" class="section-title" data-i18n="legendTitle">How to read the city</h2>
-        <div class="legend__grid">
-          <svg class="legend__house" viewBox="0 0 114 208" role="img" aria-labelledby="legend-figure-title">
-            <title id="legend-figure-title" data-i18n="legendFigure">Uma casa do banner com o grid de janelas</title>
-            <rect class="lh__roof" x="78" y="4" width="9" height="32"/>
-            <polygon class="lh__roof" points="0,36 57,0 114,36"/>
-            <rect class="lh__wall" x="9" y="36" width="96" height="172"/>
-            <rect class="lh__w1" x="18.5" y="49.5" width="13" height="13"/>
-            <rect class="lh__w2" x="18.5" y="65.5" width="13" height="13"/>
-            <rect class="lh__w3" x="18.5" y="81.5" width="13" height="13"/>
-            <rect class="lh__w4" x="18.5" y="97.5" width="13" height="13"/>
-            <rect class="lh__w2" x="18.5" y="113.5" width="13" height="13"/>
-            <rect class="lh__w1" x="18.5" y="129.5" width="13" height="13"/>
-            <rect class="lh__w1" x="18.5" y="145.5" width="13" height="13"/>
-            <rect class="lh__w0" x="34.5" y="49.5" width="13" height="13"/>
-            <rect class="lh__w1" x="34.5" y="65.5" width="13" height="13"/>
-            <rect class="lh__w2" x="34.5" y="81.5" width="13" height="13"/>
-            <rect class="lh__w3" x="34.5" y="97.5" width="13" height="13"/>
-            <rect class="lh__w2" x="34.5" y="113.5" width="13" height="13"/>
-            <rect class="lh__w1" x="34.5" y="129.5" width="13" height="13"/>
-            <rect class="lh__w0" x="34.5" y="145.5" width="13" height="13"/>
-            <rect class="lh__w2" x="50.5" y="49.5" width="13" height="13"/>
-            <rect class="lh__w3" x="50.5" y="65.5" width="13" height="13"/>
-            <rect class="lh__w4" x="50.5" y="81.5" width="13" height="13"/>
-            <rect class="lh__w3" x="50.5" y="97.5" width="13" height="13"/>
-            <rect class="lh__w2" x="50.5" y="113.5" width="13" height="13"/>
-            <rect class="lh__w1" x="50.5" y="129.5" width="13" height="13"/>
-            <rect class="lh__w1" x="50.5" y="145.5" width="13" height="13"/>
-            <rect class="lh__w0" x="66.5" y="49.5" width="13" height="13"/>
-            <rect class="lh__w0" x="66.5" y="65.5" width="13" height="13"/>
-            <rect class="lh__w1" x="66.5" y="81.5" width="13" height="13"/>
-            <rect class="lh__w2" x="66.5" y="97.5" width="13" height="13"/>
-            <rect class="lh__w3" x="66.5" y="113.5" width="13" height="13"/>
-            <rect class="lh__w4" x="66.5" y="129.5" width="13" height="13"/>
-            <rect class="lh__w3" x="66.5" y="145.5" width="13" height="13"/>
-            <rect class="lh__w1" x="82.5" y="49.5" width="13" height="13"/>
-            <rect class="lh__w1" x="82.5" y="65.5" width="13" height="13"/>
-            <rect class="lh__w0" x="82.5" y="81.5" width="13" height="13"/>
-            <rect class="lh__w2" x="82.5" y="97.5" width="13" height="13"/>
-            <rect class="lh__w3" x="82.5" y="113.5" width="13" height="13"/>
-            <rect class="lh__w2" x="82.5" y="129.5" width="13" height="13"/>
-            <rect class="lh__w1" x="82.5" y="145.5" width="13" height="13"/>
-          </svg>
-          <ul class="legend__list">
-            <li class="legend__item">
-              <span class="legend__swatch legend__swatch--house" aria-hidden="true"></span>
-              <span data-i18n="legendHouse">Every house is a month — twelve houses, the last twelve months, left to right.</span>
-            </li>
-            <li class="legend__item">
-              <span class="legend__swatch legend__swatch--window" aria-hidden="true"></span>
-              <span data-i18n="legendWindow">Every window is a day, in order: top to bottom, column by column.</span>
-            </li>
-            <li class="legend__item">
-              <span class="legend__swatch legend__swatch--light" aria-hidden="true"></span>
-              <span data-i18n="legendLight">Brightness is the day's contribution count, on the same green scale as the GitHub graph.</span>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <section class="closing">
-        <h2 class="section-title" data-i18n="closingTitle">Ready to see your city?</h2>
-        <a class="cta" href="./generate/" data-i18n="heroCta">Generate my banner</a>
+      <section class="closing shell">
+        <h2 class="closing__title" data-reveal-lines data-i18n="closingTitle">Ready to see your city?</h2>
+        <a class="cta cta--large" href="./generate/" data-magnetic data-i18n="heroCta">Generate my banner</a>
       </section>
     </main>
 
