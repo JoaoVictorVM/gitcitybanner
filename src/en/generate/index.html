@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="../../styles/fonts.css" />
     <link rel="stylesheet" href="../../styles/main.css" />
   </head>
-  <body>
+  <body class="page-landing page-generator">
     <header class="site-header shell">
       <a class="site-title" href="../" data-i18n="title">gitcitybanner</a>
       <nav class="lang-switch" aria-label="Language" data-i18n-aria-label="langSwitchLabel">
@@ -23,12 +23,15 @@
       </nav>
     </header>
 
-    <main class="site-main shell">
-      <h1 class="page-title" data-i18n="generateButtonLabel">Generate banner</h1>
-      <p class="tagline" data-i18n="tagline">
-        Turn the last 365 days of a GitHub profile's contributions into a night-city banner, ready to
-        download as a PNG.
-      </p>
+    <main class="generator shell">
+      <section class="generator__intro">
+        <p class="eyebrow" data-i18n="generatorEyebrow">Generator</p>
+        <h1 class="generator__title" data-i18n="generatorTitle">Generate your city.</h1>
+        <p class="lead generator__lead" data-i18n="tagline">
+          Turn the last 365 days of a GitHub profile's contributions into a night-city banner, ready to
+          download as a PNG.
+        </p>
+      </section>
 
       <div id="app"></div>
 
