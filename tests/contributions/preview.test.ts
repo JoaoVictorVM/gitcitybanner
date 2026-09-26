@@ -151,3 +151,113 @@ describe("preview rendering", () => {
     );
   });
 });
+
+const { createRecordingCanvas } = await import("../render/context");
+const { REVEAL_DURATION_MS } = await import("../../src/contributions/preview");
+const { resolvePalette } = await import("../../src/render/palette");
+
+describe("preview reveal", () => {
+  function litModel(username = "torvalds") {
+    const base = buildModel({ username, totalContributions: 9 });
+    return {
+      ...base,
+      weeks: base.weeks.map((week) => ({
+        days: week.days.map((day) => ({ ...day, count: 3, level: 3 })),
+      })),
+    };
+  }
+
+  function fakeClock(start = 1000) {
+    let now = start;
+    const frames: FrameRequestCallback[] = [];
+    return {
+      now: () => now,
+      schedule: (callback: FrameRequestCallback) => frames.push(callback),
+      advance(ms: number) {
+        now += ms;
+        for (const frame of frames.splice(0)) frame(now);
+      },
+      pending: () => frames.length,
+    };
+  }
+
+  function recordingShell() {
+    document.body.innerHTML = `<div id="app"></div><section id="preview" class="preview">
+      <p class="preview__hint">hint</p><div id="downloads" class="preview__actions" hidden></div></section>`;
+    const preview = document.getElementById("preview")!;
+    const { canvas, calls } = createRecordingCanvas();
+    canvas.className = "preview__canvas";
+    canvas.hidden = true;
+    preview.insertBefore(canvas, preview.querySelector(".preview__actions"));
+    const shell: Shell = {
+      root: document.getElementById("app")!,
+      preview,
+      downloads: preview.querySelector<HTMLElement>(".preview__actions")!,
+    };
+    const dark = resolvePalette().windows[0];
+    const litPerRender = () => {
+      const rects = calls.filter((call) => call.method === "fillRect");
+      const perRender = 2 + 12 + 12 + 420;
+      const renders = rects.length / perRender;
+      return Array.from({ length: renders }, (_, index) =>
+        rects.slice(index * perRender + 26, (index + 1) * perRender).filter((call) => call.fillStyle !== dark).length,
+      );
+    };
+    const captions = () =>
+      calls
+        .filter((call) => call.method === "fillText")
+        .map((call) => String(call.args[0]))
+        .filter((text) => text.startsWith("@"));
+    return { shell, litPerRender, captions };
+  }
+
+  test("lights the city up day by day after the first dark frame", () => {
+    const { shell, litPerRender } = recordingShell();
+    const clock = fakeClock();
+    renderPreview(shell, litModel(), "pt-BR", { now: clock.now, schedule: clock.schedule, reducedMotion: false });
+
+    clock.advance(REVEAL_DURATION_MS / 3);
+    clock.advance(REVEAL_DURATION_MS / 3);
+    const lit = litPerRender();
+
+    expect(lit[0]).toBe(0);
+    expect(lit[1]!).toBeGreaterThan(lit[0]!);
+    expect(lit[2]!).toBeGreaterThan(lit[1]!);
+  });
+
+  test("ends on the fully lit banner and stops scheduling frames", () => {
+    const { shell, litPerRender } = recordingShell();
+    const clock = fakeClock();
+    renderPreview(shell, litModel(), "pt-BR", { now: clock.now, schedule: clock.schedule, reducedMotion: false });
+
+    clock.advance(REVEAL_DURATION_MS + 1);
+
+    expect(clock.pending()).toBe(0);
+    expect(litPerRender().at(-1)).toBeGreaterThan(300);
+  });
+
+  test("draws the finished banner at once when reduced motion is preferred", () => {
+    const { shell, litPerRender } = recordingShell();
+    const clock = fakeClock();
+    renderPreview(shell, litModel(), "pt-BR", { now: clock.now, schedule: clock.schedule, reducedMotion: true });
+
+    expect(clock.pending()).toBe(0);
+    expect(litPerRender()).toHaveLength(1);
+    expect(litPerRender()[0]).toBeGreaterThan(300);
+  });
+
+  test("a new generation cancels the reveal still running for the previous one", () => {
+    const { shell, captions } = recordingShell();
+    const clock = fakeClock();
+    const options = { now: clock.now, schedule: clock.schedule, reducedMotion: false };
+    renderPreview(shell, litModel("torvalds"), "pt-BR", options);
+    renderPreview(shell, litModel("gaearon"), "pt-BR", options);
+
+    const before = captions().length;
+    clock.advance(REVEAL_DURATION_MS + 1);
+    const later = captions().slice(before);
+
+    expect(later.length).toBeGreaterThan(0);
+    expect(later.every((caption) => caption.startsWith("@gaearon"))).toBe(true);
+  });
+});
